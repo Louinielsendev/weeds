@@ -1,0 +1,11 @@
+{
+    "name": "test",
+    "texture": "",
+    "width": 4,
+    "height": 4,
+    "tileWidth": 16,
+    "tileHeight": 16,
+    "back": [1,1,1,1,1,0,0,1,1,0,0,1,2,2,2,2],
+    "front": [],
+    "tiles": []
+    }

@@ -19,6 +19,7 @@ weeds.scene.Game = function() {
     this.gamepad = null;
     this.bullets = null;
     this.enemys = null;
+    this.tilemap = null
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -54,9 +55,10 @@ weeds.scene.Game.prototype.init = function() {
     this.initGamepad();
     this.initBullets();
     this.initEnemys();
+    this.initTilemap()
     this.initPlayer();
     this.initCamera();
-   
+    
     
     
 };
@@ -129,3 +131,9 @@ weeds.scene.Game.prototype.initEnemys = function(){
     }
 }
 
+weeds.scene.Game.prototype.initTilemap = function(){
+    
+    
+    this.stage.m_map.load('tilemap')
+    console.log(this.stage)
+}

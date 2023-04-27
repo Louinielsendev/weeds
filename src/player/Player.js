@@ -57,7 +57,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
     }
 
 
-    if (this.keyboard.pressed('SPACE')) {
+    if (this.keyboard.justPressed('SPACE')) {
         this.isDashing = true
 
     }
