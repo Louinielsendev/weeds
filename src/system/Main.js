@@ -30,7 +30,9 @@ weeds.system.Main = function() {
         useGamepads:true,
         useKeyboard:true,
         framerate: 30,
-        debug: true
+        debug: true,
+        screenResolutionX: 568,
+        screenResolutionY: 320
     });
 };
 

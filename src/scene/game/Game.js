@@ -20,6 +20,14 @@ weeds.scene.Game = function() {
     this.bullets = null;
     this.enemys = null;
     this.tilemap = null
+    this.camera = null
+    this.spawner = null;
+    this.score = null;
+    this.boost = null;
+    this.boostmeter = null;
+    this.gameOver = null;
+
+    
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -56,8 +64,13 @@ weeds.scene.Game.prototype.init = function() {
     this.initBullets();
     this.initEnemys();
     this.initTilemap()
-    this.initPlayer();
     this.initCamera();
+    this.initBoost();
+    this.initScore();
+    this.initBoostmeter();
+    this.initPlayer();
+    this.initSpawner();
+    
     
     
     
@@ -74,11 +87,24 @@ weeds.scene.Game.prototype.init = function() {
 weeds.scene.Game.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    this.player.updatePlayer(step)
+   
+    if (!this.gameOver){
+        this.bullets.forEachMember(bullet => {
+            bullet.updateBullet()
+        })
+        this.enemys.forEachMember(enemy => {
+            enemy.updateEnemy(step)
+        })
+        this.spawner.update(step);
+        this.player.updatePlayer(step)
+    }
+    
 
-    this.bullets.forEachMember(bullet => {
-        bullet.updateBullet()
-    })
+    if (this.gameOver){
+        if (this.gamepad.justPressed(9)){
+            this.resetGame()
+        }
+    }
 };
 
 /**
@@ -107,33 +133,63 @@ weeds.scene.Game.prototype.initBullets = function(){
     this.bullets = this.groups.create(this.stage)
 }
 
+
+
 weeds.scene.Game.prototype.initPlayer = function() {
-    this.player = new weeds.player.Player(50, 50, 32, 32, 'gardner', this.gamepad, this.bullets, this.enemys)
+    this.player = new weeds.player.Player(500, 500, 32, 32, 'gardnerFull', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this)
     this.player.animation.create('run', [0,1,2,3,4,5], 6, true)
+    this.player.animation.create('dash', [6,7,8,9,10,11], 6, true )
     this.stage.addChild(this.player)
-    console.log(this.player)
+    this.camera.targets.add(this.player)
+    
 }
 
 weeds.scene.Game.prototype.initCamera = function() {
-    this.cameras.getCameraAt(0).targets.add(this.player)
-    this.cameras.getCameraAt(0).bounderies = new rune.geom.Rectangle(0, 0, 1000, 1000)
+    this.camera = this.cameras.getCameraAt(0)
+    this.camera.bounderies = new rune.geom.Rectangle(0, 0, 1000, 1000)
   
     
 }
 
 weeds.scene.Game.prototype.initEnemys = function(){
     this.enemys = this.groups.create(this.stage)
-    for (var i = 0; i < 10; i++){
-        var x = Math.random() * 800
-        var y = Math.random() * 800
-        var enemy = new weeds.enemy.Enemy(x, y, 32, 32, 'enemy')
-        this.enemys.addMember(enemy)
-    }
+    
 }
 
 weeds.scene.Game.prototype.initTilemap = function(){
+    this.stage.map.load('tilemap')
+}
+
+weeds.scene.Game.prototype.initSpawner = function(){
+    this.spawner = new weeds.spawner.Spawner(this.enemys, this.stage.map, this.player, this.boost, this.score)
     
-    
-    this.stage.m_map.load('tilemap')
-    console.log(this.stage)
+}
+
+weeds.scene.Game.prototype.initBoost = function(){
+    this.boost = this.groups.create(this.stage)
+}
+
+weeds.scene.Game.prototype.initScore = function(){
+    this.score = new weeds.stats.Score()
+    this.score.updateScore()
+    this.score.x = 530;
+    this.score.y = 10;
+    this.application.screen.addChild(this.score)
+    console.log(this.score)
+}
+
+weeds.scene.Game.prototype.initBoostmeter = function(){
+    this.boostmeter = new weeds.stats.Boostmeter()
+    this.boostmeter.x = 480;
+    this.boostmeter.y = 10;
+    this.application.screen.addChild(this.boostmeter)
+
+}
+
+
+
+weeds.scene.Game.prototype.endGame = function(){
+    this.application.screen.removeChild(this.score)
+    this.application.screen.removeChild(this.boostmeter)
+    this.application.scenes.load([new weeds.scene.GameOver()])
 }

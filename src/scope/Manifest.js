@@ -27,11 +27,15 @@ var weeds = function() {
     
     m_this.player = {};
 
+    m_this.spawner = {};
 
     m_this.bullet = {};
 
-    
     m_this.enemy = {};
+
+    m_this.boost = {};
+
+    m_this.stats = {};
 
     /**
      * This package contains classes that represent data, or that are used to 
