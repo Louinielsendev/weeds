@@ -128,7 +128,7 @@ weeds.scene.Game.prototype.dispose = function() {
 };
 
 weeds.scene.Game.prototype.initBackground = function() {
-    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024')
+    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v2')
    
     this.stage.addChild(this.background)
 }
