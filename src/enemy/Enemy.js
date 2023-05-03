@@ -1,10 +1,11 @@
-weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score) {
+weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.tilemap = tilemap
     this.player = player
     this.enemys = enemys
     this.boost = boost
     this.score = score
+    this.lifes = lifes
     this.speed = 2
     this.path = null
     this.pathTimer = 1000
@@ -34,9 +35,11 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
   if (this.intersects(this.player)){
     this.attackTimer += step
     
-    if (this.attackTimer >= this.attackCooldown){
+    if (this.attackTimer >= this.attackCooldown && !this.flicker.active){
       this.player.flicker.start()
       this.player.lifes -= 1;
+      this.lifes.value = this.player.lifes
+      this.lifes.updateLifes()
    
     this.attackTimer = 0
     }
@@ -53,7 +56,7 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
 }
 
 weeds.enemy.Enemy.prototype.moveEnemy = function(){
-   
+ 
     if (this.path.m_nodes.length > 1) {
         var nextTile = this.path.m_nodes[1];
         var distanceX = nextTile.x - this.x;

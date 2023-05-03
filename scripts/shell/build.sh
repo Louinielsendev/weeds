@@ -1,7 +1,7 @@
 #!/bin/bash
 
 npx google-closure-compiler \
---language_in ECMASCRIPT5_STRICT \
+--language_in ECMASCRIPT6_STRICT \
 --language_out ECMASCRIPT5_STRICT \
 --warning_level DEFAULT \
 --compilation_level WHITESPACE_ONLY \
@@ -15,8 +15,11 @@ npx google-closure-compiler \
 --js "./../../src/bullet/Bullet.js" \
 --js "./../../src/boost/Boost.js" \
 --js "./../../src/stats/Score.js" \
+--js "./../../src/stats/Lifes.js" \
 --js "./../../src/stats/Boostmeter.js" \
 --js "./../../src/enemy/Enemy.js" \
+--js "./../../src/enemy/bigplant/Bigplant.js" \
+--js "./../../src/enemy/smallplant/Smallplant.js" \
 --js "./../../src/spawner/Spawner.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \

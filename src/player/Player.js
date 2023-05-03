@@ -34,23 +34,23 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
         }
     })
 
-    if (this.gamepad.stickLeftLeft) {
+    if (this.gamepad.stickLeftLeft && this.x > 66) {
         this.x -= this.speed
         this.flippedX = true
         this.animation.gotoAndPlay('run')
     }
 
 
-    if (this.gamepad.stickLeftRight) {
+    if (this.gamepad.stickLeftRight && this.x < 910) {
         this.x += this.speed
         this.flippedX = false
         this.animation.gotoAndPlay('run')
     }
-    if (this.gamepad.stickLeftUp) {
+    if (this.gamepad.stickLeftUp && this.y > 66) {
         this.y -= this.speed
         this.animation.gotoAndPlay('run')
     }
-    if (this.gamepad.stickLeftDown) {
+    if (this.gamepad.stickLeftDown && this.y < 915) {
         this.y += this.speed
         this.animation.gotoAndPlay('run')
     }
@@ -130,7 +130,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
                 enemy.life -= 10
 
             }
-            this.camera.flicker.start(1000)
+           
           
             this.boostmeter.value = 0
             this.boostmeter.updateBoostmeter()

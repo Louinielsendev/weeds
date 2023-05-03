@@ -1,4 +1,4 @@
-weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score) {
+weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lifes) {
     this.enemys = enemys
     this.level = 1
     this.spawnCooldown = 1000
@@ -7,6 +7,7 @@ weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score) {
     this.player = player
     this.boost = boost
     this.score = score
+    this.lifes = lifes
 }
 
 weeds.spawner.Spawner.prototype.update = function (step) {
@@ -34,9 +35,15 @@ weeds.spawner.Spawner.prototype.update = function (step) {
                 break;
             
         }
-
-        var enemy = new weeds.enemy.Enemy(x, y, 32, 32, 'enemyhitbox', this.tilemap, this.player, this.enemys, this.boost, this.score)
-        this.enemys.addMember(enemy)
+        var enemyType =  Math.ceil(Math.random() * 10)
+        if (enemyType == 7){
+            var enemy = new weeds.enemy.Bigplant(x, y, 32, 48, 'bigenemy', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lifes)
+            this.enemys.addMember(enemy)
+        }
+        else {
+            var enemy = new weeds.enemy.Smallplant(x, y, 16, 32, 'enemyhitbox', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lifes)
+            this.enemys.addMember(enemy)
+        }
         this.spawnDuration = 0
         console.log('enemy spawn')
     }
