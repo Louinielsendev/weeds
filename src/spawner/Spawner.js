@@ -2,7 +2,7 @@ weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lifes) 
     this.enemys = enemys
     this.level = 1
     this.spawnCooldown = 1000
-    this.spawnDuration = 2000
+    this.spawnDuration = 1000
     this.tilemap = tilemap
     this.player = player
     this.boost = boost
@@ -11,6 +11,7 @@ weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lifes) 
 }
 
 weeds.spawner.Spawner.prototype.update = function (step) {
+    
     this.spawnDuration += step;
     if (this.spawnDuration >= this.spawnCooldown) {
         var side = Math.ceil(Math.random() * 4)
@@ -35,7 +36,7 @@ weeds.spawner.Spawner.prototype.update = function (step) {
                 break;
             
         }
-        var enemyType =  Math.ceil(Math.random() * 10)
+        var enemyType =  Math.ceil(Math.random() * 15)
         if (enemyType == 7){
             var enemy = new weeds.enemy.Bigplant(x, y, 32, 48, 'bigenemy', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lifes)
             this.enemys.addMember(enemy)
@@ -47,5 +48,7 @@ weeds.spawner.Spawner.prototype.update = function (step) {
         this.spawnDuration = 0
         console.log('enemy spawn')
     }
-
+    var fraction = step / 1000
+    this.spawnCooldown -= fraction
+    console.log(this.spawnCooldown)
 }

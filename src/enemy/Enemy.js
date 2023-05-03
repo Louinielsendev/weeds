@@ -11,8 +11,9 @@ weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, en
     this.pathTimer = 1000
     this.pathCooldown = 200
     this.life = 5
-    this.attackTimer = 500
+    this.attackTimer = 700
     this.attackCooldown = 1000
+    this.debug = true
 }
 
 weeds.enemy.Enemy.prototype = Object.create(rune.display.Sprite.prototype);
