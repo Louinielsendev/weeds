@@ -1,11 +1,11 @@
-weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes) {
+weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.tilemap = tilemap
     this.player = player
     this.enemys = enemys
     this.boost = boost
     this.score = score
-    this.lifes = lifes
+    this.lives = lives
     this.speed = 2
     this.path = null
     this.pathTimer = 1000
@@ -14,6 +14,8 @@ weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, en
     this.attackTimer = 700
     this.attackCooldown = 1000
     this.debug = true
+    this.value = 10
+    this.killScores = killScores
 }
 
 weeds.enemy.Enemy.prototype = Object.create(rune.display.Sprite.prototype);
@@ -23,13 +25,19 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
   
   this.pathTimer += step;
   if (this.life <= 0){
+    var text = this.value.toString()
+    var killScore = new weeds.stats.KillScore(text)
+    killScore.x = this.x
+    killScore.y = this.y
+    
+    this.killScores.addMember(killScore)
     this.enemys.removeMember(this)
-    this.score.value += 10
+    this.score.value += this.value
     this.score.updateScore()
     var randomNumber = Math.floor(Math.random() * 12)
     if (randomNumber == 7){
-      var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'bonus', this.player, this.boost)
-      boost.animation.create('idle', [0,1,2,3], 8, true)
+      var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
+      boost.animation.create('idle', [0,1], 2, true)
       this.boost.addMember(boost)
     }
   }
@@ -38,9 +46,12 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
     
     if (this.attackTimer >= this.attackCooldown && !this.flicker.active){
       this.player.flicker.start()
-      this.player.lifes -= 1;
-      this.lifes.value = this.player.lifes
-      this.lifes.updateLifes()
+      this.player.lives -= 1;
+      this.lives.value = this.player.lives
+      
+      this.lives.width -= 54
+    
+      
    
     this.attackTimer = 0
     }

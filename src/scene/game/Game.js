@@ -13,19 +13,22 @@
  * 
  * Game scene.
  */
-weeds.scene.Game = function() {
+weeds.scene.Game = function(highscore) {
     this.background = null
     this.player = null;
     this.gamepad = null;
     this.bullets = null;
+    this.thorns = null;
     this.enemys = null;
     this.camera = null
     this.spawner = null;
     this.score = null;
     this.boost = null;
-    this.lifes = null;
+    this.livaes = null;
     this.boostmeter = null;
     this.gameOver = null;
+    this.killScores = null
+    this.highscore = highscore
 
     
     //--------------------------------------------------------------------------
@@ -61,13 +64,10 @@ weeds.scene.Game.prototype.init = function() {
 
     this.initBackground();
     this.initGamepad();
-    this.initBullets();
-    this.initEnemys();
-    
+    this.initGroups()
     this.initCamera();
-    this.initBoost();
     this.initScore();
-    this.initLifes();
+    this.initLives();
     this.initBoostmeter();
     this.initPlayer();
     this.initTilemap();
@@ -96,6 +96,16 @@ weeds.scene.Game.prototype.update = function(step) {
             this.stage.map.m_bufferA.hitTest(bullet, function(bullet){
                 this.bullets.removeMember(bullet)
             }, this)
+        })
+        this.thorns.forEachMember(thorn => {
+            thorn.updateThorn()
+            if (!this.background.intersects(thorn)){
+                this.thorns.removeMember(thorn)
+                
+            }
+        })
+        this.killScores.forEachMember(killScore => {
+           killScore.updateKillScore()
         })
         this.enemys.forEachMember(enemy => {
             enemy.updateEnemy(step)
@@ -128,7 +138,7 @@ weeds.scene.Game.prototype.dispose = function() {
 };
 
 weeds.scene.Game.prototype.initBackground = function() {
-    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v2')
+    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v3')
    
     this.stage.addChild(this.background)
 }
@@ -137,8 +147,12 @@ weeds.scene.Game.prototype.initGamepad = function() {
    this.gamepad = this.gamepads.get(0)
 }
 
-weeds.scene.Game.prototype.initBullets = function(){
+weeds.scene.Game.prototype.initGroups = function(){
     this.bullets = this.groups.create(this.stage)
+    this.enemys = this.groups.create(this.stage)
+    this.boost = this.groups.create(this.stage)
+    this.thorns = this.groups.create(this.stage)
+    this.killScores = this.groups.create(this.stage)
 }
 
 
@@ -159,63 +173,56 @@ weeds.scene.Game.prototype.initCamera = function() {
     
 }
 
-weeds.scene.Game.prototype.initEnemys = function(){
-    this.enemys = this.groups.create(this.stage)
-    
-}
 
 weeds.scene.Game.prototype.initTilemap = function(){
     this.stage.map.load('tilemap')
-    console.log()
+  
 
 }
 
 weeds.scene.Game.prototype.initSpawner = function(){
-    this.spawner = new weeds.spawner.Spawner(this.enemys, this.stage.map, this.player, this.boost, this.score, this.lifes)
+    this.spawner = new weeds.spawner.Spawner(this.enemys, this.stage.map, this.player, this.boost, this.score, this.lives, this.thorns, this.camera, this.killScores)
     
 }
 
-weeds.scene.Game.prototype.initBoost = function(){
-    this.boost = this.groups.create(this.stage)
-}
 
 weeds.scene.Game.prototype.initScore = function(){
     this.score = new weeds.stats.Score()
     this.score.updateScore()
-    this.score.x = 532;
-    this.score.y = 25;
+    this.score.x = 280;
+    this.score.y = 15;
     this.application.screen.addChild(this.score)
-    var score = new rune.text.BitmapField('Score', '')
-    score.x = 520
-    score.y = 10
-    this.application.screen.addChild(score)
+   
 }
 
 weeds.scene.Game.prototype.initBoostmeter = function(){
-    
-    this.boostmeter = new weeds.stats.Boostmeter()
-
-    this.boostmeter.x = 440;
-    this.boostmeter.y = 25;
+    this.boostmeter = new weeds.stats.Boostmeter(0, 16, '#A020F0', '#ff004d')
+    this.boostmeter.width = 1
+    this.boostmeter.x = 10
+    this.boostmeter.y = 10
     this.application.screen.addChild(this.boostmeter)
-    var boostmeter = new rune.text.BitmapField('Boostmeter', '')
-    boostmeter.x = 425
-    boostmeter.y = 10
-    this.application.screen.addChild(boostmeter)
+        
+    var overlay = new rune.display.Graphic(1,1, 164, 16,'boostbar')
+    overlay.x = 10;
+    overlay.y = 10;
+    this.application.screen.addChild(overlay)
+  
 
 }
 
-weeds.scene.Game.prototype.initLifes = function(){
+weeds.scene.Game.prototype.initLives = function(){
     
-    this.lifes = new weeds.stats.Lifes()
+    this.lives = new weeds.stats.Lives(164, 16, '#0000FF', '#ff004d')
 
-    this.lifes.x = 360;
-    this.lifes.y = 25;
-    this.application.screen.addChild(this.lifes)
-    var lifes = new rune.text.BitmapField('Lifes', '')
-    lifes.x = 350
-    lifes.y = 10
-    this.application.screen.addChild(lifes)
+    this.lives.x = 395
+    this.lives.y = 10
+    this.application.screen.addChild(this.lives)
+        
+    var overlay = new rune.display.Graphic(1,1, 164, 16,'lifebar')
+    overlay.x = 395;
+    overlay.y = 10;
+    this.application.screen.addChild(overlay)
+        
 
 }
 
@@ -223,8 +230,15 @@ weeds.scene.Game.prototype.initLifes = function(){
 
 
 weeds.scene.Game.prototype.endGame = function(){
+    if(this.highscore.test(this.score.value) >= 0){
+        
+        this.highscore.send(this.score.value, 'loui', 0)
+        
+    }
+    console.log(this.highscore.test(this.score.value))
+    console.log(this.highscore)
     this.application.screen.removeChild(this.score)
     this.application.screen.removeChild(this.boostmeter)
     this.application.screen.removeChild(this.lifes)
-    this.application.scenes.load([new weeds.scene.GameOver()])
+    this.application.scenes.load([new weeds.scene.GameOver(this.highscore)])
 }

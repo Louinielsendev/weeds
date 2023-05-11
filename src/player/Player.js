@@ -1,7 +1,7 @@
 weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets, enemys, camera, boost, boostmeter, game) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.speed = 3
-    this.lifes = 3
+    this.lives = 3
     this.gamepad = gamepad
     this.bullets = bullets
     this.enemys = enemys
@@ -21,16 +21,19 @@ weeds.player.Player.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.player.Player.prototype.constructor = weeds.player.Player;
 
 weeds.player.Player.prototype.updatePlayer = function (step) {
-    if (this.lifes <= 0){
+    if (this.lives <= 0){
         
        this.game.endGame()
     }
     this.boost.forEachMember(boost => {
         if (boost.intersects(this)) {
-            console.log('load ulti')
+           
             this.boost.removeMember(boost)
-            this.boostmeter.value++
-            this.boostmeter.updateBoostmeter()
+            this.boostmeter.value += 1
+            if (this.boostmeter.width < 160){
+                this.boostmeter.width += 16.3
+            }
+          
         }
     })
 
@@ -90,7 +93,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
     if (this.gamepad.stickRightDown || this.gamepad.stickRightUp || this.gamepad.stickRightRight || this.gamepad.stickRightLeft) {
         if (this.bulletTimer >= this.bulletCooldown) {
-            console.log(this.bulletTimer)
+           
             var x = this.gamepad.stickRight.x
             var y = this.gamepad.stickRight.y
             var radians = Math.atan2(y, x)
@@ -123,7 +126,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
         this.isDashing = true
     }
 
-    if (this.gamepad.justPressed(7) && this.boostmeter.value >= 1) {
+    if (this.gamepad.justPressed(7) && this.boostmeter.value >= 10) {
         this.enemys.forEachMember(enemy => {
             
             if (this.camera.viewport.intersects(enemy)) {
@@ -131,9 +134,9 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
             }
            
-          
+            this.boostmeter.width = 1
             this.boostmeter.value = 0
-            this.boostmeter.updateBoostmeter()
+            
 
         })
 
@@ -142,11 +145,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 }
 
 weeds.player.Player.prototype.shot = function (radians) {
-    var bullet = new weeds.bullet.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
+    var bullet = new weeds.projectile.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
     this.bullets.addMember(bullet)
 }
 
-weeds.player.Player.prototype.dash = function () {
-
-
-}

@@ -1,4 +1,4 @@
-weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lifes) {
+weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lives, thorns, camera, killScores) {
     this.enemys = enemys
     this.level = 1
     this.spawnCooldown = 1000
@@ -7,7 +7,10 @@ weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lifes) 
     this.player = player
     this.boost = boost
     this.score = score
-    this.lifes = lifes
+    this.lives = lives
+    this.thorns = thorns
+    this.camera = camera
+    this.killScores = killScores
 }
 
 weeds.spawner.Spawner.prototype.update = function (step) {
@@ -19,36 +22,43 @@ weeds.spawner.Spawner.prototype.update = function (step) {
         var y = 0
         switch (side) {
             case 1:
-                x = Math.random() * 1000
+                x = Math.random() * 900 + 70
                 y = 0
                 break;
             case 2:
                 x = 1000
-                y = Math.random() * 1000
+                y = Math.random() * 900 + 70
                 break;
             case 3:
-                x = Math.random() * 1000
+                x = Math.random() * 900 + 70
                 y = 1000
                 break;
             case 4:
                 x = 0
-                y = Math.random() * 1000
+                y = Math.random() * 900 + 70
                 break;
             
         }
-        var enemyType =  Math.ceil(Math.random() * 15)
+        var enemyType =  Math.ceil(Math.random() * 30)
         if (enemyType == 7){
-            var enemy = new weeds.enemy.Bigplant(x, y, 32, 48, 'bigenemy', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lifes)
+            var enemy = new weeds.enemy.Bigplant(x, y, 32, 48, 'bigenemy', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lives, this.killScores)
+            this.enemys.addMember(enemy)
+        }
+        else if (enemyType == 9 || enemyType == 11 ){
+            
+            var enemy = new weeds.enemy.Thornbush(x, y, 32, 32, 'thornbush', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lives, this.killScores, side, this.thorns, this.camera)
             this.enemys.addMember(enemy)
         }
         else {
-            var enemy = new weeds.enemy.Smallplant(x, y, 16, 32, 'enemyhitbox', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lifes)
+            var enemy = new weeds.enemy.Smallplant(x, y, 16, 32, 'enemyhitbox', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lives, this.killScores)
             this.enemys.addMember(enemy)
         }
+           
+        
         this.spawnDuration = 0
-        console.log('enemy spawn')
+      
     }
     var fraction = step / 1000
     this.spawnCooldown -= fraction
-    console.log(this.spawnCooldown)
+  
 }

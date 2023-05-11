@@ -13,11 +13,10 @@
  * 
  * Game scene.
  */
-weeds.scene.GameOver = function (highscore) {
-    this.highscore = highscore
+weeds.scene.Menu = function () {
+    this.highscore = null
     this.menu = null
     this.gamepad = null;
-    
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -32,8 +31,8 @@ weeds.scene.GameOver = function (highscore) {
 // Inheritance
 //------------------------------------------------------------------------------
 
-weeds.scene.GameOver.prototype = Object.create(rune.scene.Scene.prototype);
-weeds.scene.GameOver.prototype.constructor = weeds.scene.GameOver;
+weeds.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype);
+weeds.scene.Menu.prototype.constructor = weeds.scene.Menu;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -45,13 +44,14 @@ weeds.scene.GameOver.prototype.constructor = weeds.scene.GameOver;
  *
  * @returns {undefined}
  */
-weeds.scene.GameOver.prototype.init = function () {
+weeds.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.highscore = new rune.data.Highscores('weeds', 5, 1)
    
     this.initMenu();
     this.initGamepad();
-
-    var text = new rune.text.BitmapField('Game Over')
+    console.log(this.highscore)
+    var text = new rune.text.BitmapField('Weeds')
     text.autoSize = true
     text.center = this.application.screen.center;
     this.stage.addChild(text)
@@ -70,7 +70,7 @@ weeds.scene.GameOver.prototype.init = function () {
  *
  * @returns {undefined}
  */
-weeds.scene.GameOver.prototype.update = function (step) {
+weeds.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepad.justPressed(13)) {
         this.menu.down()
@@ -82,7 +82,7 @@ weeds.scene.GameOver.prototype.update = function (step) {
     }
     if (this.gamepad.justPressed(0)) {
         this.menu.select()
-        console.log(this.menu)
+      
     }
 
 
@@ -97,32 +97,35 @@ weeds.scene.GameOver.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-weeds.scene.GameOver.prototype.dispose = function () {
+weeds.scene.Menu.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
 
-weeds.scene.GameOver.prototype.initMenu = function () {
+weeds.scene.Menu.prototype.initMenu = function () {
     this.menu = new rune.ui.VTMenu()
     this.menu.y = 100
-    this.menu.add('Play again')
-    this.menu.add('Back to main menu')
-    
+    this.menu.add('Play')
+    this.menu.add('How to play')
+    this.menu.add('Highscore')
     this.stage.addChild(this.menu)
-    
+   
     this.menu.onSelect(function () {
-        console.log(this.menu.m_index)
+       
         switch (this.menu.m_index) {
             case 0:
                 this.application.scenes.load([new weeds.scene.Game(this.highscore)])
                 break;
             case 1:
-                this.application.scenes.load([new weeds.scene.Menu()])
+                this.application.scenes.load([new weeds.scene.Tutorial()])
+                break;
+            case 2:
+                this.application.scenes.load([new weeds.scene.Highscore(this.highscore)])
                 break;
         }
 
     }, this)
 }
 
-weeds.scene.GameOver.prototype.initGamepad = function () {
+weeds.scene.Menu.prototype.initGamepad = function () {
     this.gamepad = this.gamepads.get(0)
 }

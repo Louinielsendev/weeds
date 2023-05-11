@@ -1,5 +1,5 @@
-weeds.enemy.Smallplant = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes) {
-    weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes);
+weeds.enemy.Smallplant = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes, killScores) {
+    weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes, killScores);
     this.speed = 2.8
     this.life = 2
 }

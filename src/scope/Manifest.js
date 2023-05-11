@@ -29,7 +29,7 @@ var weeds = function() {
 
     m_this.spawner = {};
 
-    m_this.bullet = {};
+    m_this.projectile = {};
 
     m_this.enemy = {};
 

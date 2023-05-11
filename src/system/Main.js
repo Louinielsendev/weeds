@@ -25,7 +25,7 @@ weeds.system.Main = function() {
         developer: "com.louidev",
         app: "weeds",
         build: "1.0.0",
-        scene: weeds.scene.Game,
+        scene: weeds.scene.Menu,
         resources: weeds.data.Requests,
         useGamepads:true,
         useKeyboard:true,

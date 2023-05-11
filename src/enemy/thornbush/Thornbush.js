@@ -1,0 +1,81 @@
+weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, side, thorns, camera) {
+    weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores);
+    this.life = 5
+    this.lives = lives
+    this.speed = 1.5
+    this.side = side
+    this.value = 25
+    this.thorns = thorns
+    this.thornTimer = 0
+    this.thornCooldown = 2000
+    
+    this.camera = camera
+}
+
+weeds.enemy.Thornbush.prototype = Object.create(weeds.enemy.Enemy.prototype);
+weeds.enemy.Thornbush.prototype.constructor = weeds.enemy.Thornbush;
+
+weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
+    this.thornTimer += step;
+    if (this.life <= 0){
+        this.enemys.removeMember(this)
+        this.score.value += this.value
+        this.score.updateScore()
+        var randomNumber = Math.floor(Math.random() * 12)
+        if (randomNumber == 7){
+          var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
+          boost.animation.create('idle', [0,1], 2, true)
+          this.boost.addMember(boost)
+        }
+      }
+    switch (this.side) {
+        case 1:
+            if (this.y < 1000){
+                this.y += this.speed
+            }
+            else {
+                this.side = 3
+            }
+            break;
+        case 2:
+            if (this.x > 0){
+                this.x -= this.speed
+            }
+            else {
+                this.side = 4
+            }
+            break;
+        case 3:
+            if (this.y > 0){
+                this.y -= this.speed
+            }
+            else {
+                this.side = 1
+            }
+            break;
+        case 4:
+            if (this.x < 1000){
+                this.x += this.speed
+            }
+            else {
+               this.side = 2
+            }
+            break;
+        
+    }
+    if (this.thornTimer >= this.thornCooldown && this.intersects(this.camera.viewport)) {
+        this.attack()
+        this.thornTimer = 0
+    }
+    
+}
+
+weeds.enemy.Thornbush.prototype.attack = function(){
+    for (var i = 0; i < 4; i++){
+        var thorn = new weeds.projectile.Thorn(this.centerX, this.centerY, 16, 16, 'thorn', this.player, this.camera, this.thorns, this.lives, i)
+        thorn.setDirection()
+        thorn.animation.create('roll', [0,1,2,3,4,5], 12, true)
+        this.thorns.addMember(thorn)
+    }
+   
+}

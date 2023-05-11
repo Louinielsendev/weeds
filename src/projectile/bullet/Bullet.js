@@ -1,4 +1,4 @@
-weeds.bullet.Bullet = function (x, y, width, height, resource, radians, bullets, enemys, camera) {
+weeds.projectile.Bullet = function (x, y, width, height, resource, radians, bullets, enemys, camera) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.bulletSpeed = 5
     this.radians = radians
@@ -10,16 +10,16 @@ weeds.bullet.Bullet = function (x, y, width, height, resource, radians, bullets,
     
 }
 
-weeds.bullet.Bullet.prototype = Object.create(rune.display.Sprite.prototype);
-weeds.bullet.Bullet.prototype.constructor = weeds.bullet.bullet;
+weeds.projectile.Bullet.prototype = Object.create(rune.display.Sprite.prototype);
+weeds.projectile.Bullet.prototype.constructor = weeds.projectile.Bullet;
 
-weeds.bullet.Bullet.prototype.updateBullet = function(){
+weeds.projectile.Bullet.prototype.updateBullet = function(){
     this.enemys.forEachMember(enemy => {
 
         if (enemy.intersects(this)){
            
             enemy.life -= 1
-           
+           enemy.flicker.start()
             
             this.bullets.removeMember(this)
             
