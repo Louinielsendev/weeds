@@ -18,6 +18,12 @@ weeds.enemy.Thornbush.prototype.constructor = weeds.enemy.Thornbush;
 weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
     this.thornTimer += step;
     if (this.life <= 0){
+        var text = this.value.toString()
+        var killScore = new weeds.stats.KillScore(text)
+        killScore.x = this.x
+        killScore.y = this.y
+        
+        this.killScores.addMember(killScore)
         this.enemys.removeMember(this)
         this.score.value += this.value
         this.score.updateScore()

@@ -9,12 +9,12 @@ weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets,
     this.game = game
     this.boost = boost
     this.boostmeter = boostmeter
-    this.debug = true
+  
     this.isDashing = false
     this.dashTimer = 0
     this.dashDuration = 300
     this.bulletTimer = 0
-    this.bulletCooldown = 130
+    this.bulletCooldown = 150
 }
 
 weeds.player.Player.prototype = Object.create(rune.display.Sprite.prototype);

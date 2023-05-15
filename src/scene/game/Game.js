@@ -106,9 +106,15 @@ weeds.scene.Game.prototype.update = function(step) {
         })
         this.killScores.forEachMember(killScore => {
            killScore.updateKillScore()
+           if(killScore.alpha <= 0){
+            this.killScores.removeMember(killScore)
+           
+           }
+           console.log(this.killScores)
         })
         this.enemys.forEachMember(enemy => {
             enemy.updateEnemy(step)
+            this.stage.map.m_bufferA.hitTestAndSeparate(enemy, this)
         })
         this.spawner.update(step);
         this.player.updatePlayer(step)
@@ -138,7 +144,7 @@ weeds.scene.Game.prototype.dispose = function() {
 };
 
 weeds.scene.Game.prototype.initBackground = function() {
-    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v3')
+    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v4')
    
     this.stage.addChild(this.background)
 }
