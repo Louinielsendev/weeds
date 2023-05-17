@@ -23,18 +23,18 @@ weeds.spawner.Spawner.prototype.update = function (step) {
         switch (side) {
             case 1:
                 x = Math.random() * 900 + 70
-                y = 0
+                y = 50
                 break;
             case 2:
-                x = 1000
+                x = 950
                 y = Math.random() * 900 + 70
                 break;
             case 3:
                 x = Math.random() * 900 + 70
-                y = 1000
+                y = 950
                 break;
             case 4:
-                x = 0
+                x = 50
                 y = Math.random() * 900 + 70
                 break;
             

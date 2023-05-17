@@ -8,7 +8,7 @@ weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player
     this.thorns = thorns
     this.thornTimer = 0
     this.thornCooldown = 2000
-    
+
     this.camera = camera
 }
 
@@ -17,26 +17,29 @@ weeds.enemy.Thornbush.prototype.constructor = weeds.enemy.Thornbush;
 
 weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
     this.thornTimer += step;
-    if (this.life <= 0){
+    if (this.life <= 0) {
         var text = this.value.toString()
         var killScore = new weeds.stats.KillScore(text)
         killScore.x = this.x
         killScore.y = this.y
-        
+
         this.killScores.addMember(killScore)
         this.enemys.removeMember(this)
         this.score.value += this.value
         this.score.updateScore()
         var randomNumber = Math.floor(Math.random() * 12)
-        if (randomNumber == 7){
-          var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
-          boost.animation.create('idle', [0,1], 2, true)
-          this.boost.addMember(boost)
+        if (randomNumber == 7) {
+            var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
+            boost.animation.create('idle', [0, 1], 2, true)
+            this.boost.addMember(boost)
         }
-      }
+    }
+   
+
     switch (this.side) {
+
         case 1:
-            if (this.y < 1000){
+            if (this.y < 930) {
                 this.y += this.speed
             }
             else {
@@ -44,7 +47,7 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
             }
             break;
         case 2:
-            if (this.x > 0){
+            if (this.x > 70) {
                 this.x -= this.speed
             }
             else {
@@ -52,7 +55,7 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
             }
             break;
         case 3:
-            if (this.y > 0){
+            if (this.y > 70) {
                 this.y -= this.speed
             }
             else {
@@ -60,28 +63,33 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
             }
             break;
         case 4:
-            if (this.x < 1000){
+            if (this.x < 930) {
                 this.x += this.speed
             }
             else {
-               this.side = 2
+                this.side = 2
             }
             break;
-        
+
     }
     if (this.thornTimer >= this.thornCooldown && this.intersects(this.camera.viewport)) {
         this.attack()
         this.thornTimer = 0
     }
-    
+    if (this.tilemap.m_bufferA.hitTest(this, this) && this.side == 4) {
+        this.side = 1
+    }
+    else if (this.tilemap.m_bufferA.hitTest(this, this)) {
+        this.side++
+    }
 }
 
-weeds.enemy.Thornbush.prototype.attack = function(){
-    for (var i = 0; i < 4; i++){
+weeds.enemy.Thornbush.prototype.attack = function () {
+    for (var i = 0; i < 4; i++) {
         var thorn = new weeds.projectile.Thorn(this.centerX, this.centerY, 16, 16, 'thorn', this.player, this.camera, this.thorns, this.lives, i)
         thorn.setDirection()
-        thorn.animation.create('roll', [0,1,2,3,4,5], 12, true)
+        thorn.animation.create('roll', [0, 1, 2, 3, 4, 5], 12, true)
         this.thorns.addMember(thorn)
     }
-   
+
 }
