@@ -13,7 +13,7 @@ weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, en
     this.life = 5
     this.attackTimer = 700
     this.attackCooldown = 1000
-    this.debug = true
+    
     this.value = 10
     this.killScores = killScores
 }
@@ -42,20 +42,18 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
     }
   }
   if (this.intersects(this.player)){
-    this.attackTimer += step
-    
-    if (this.attackTimer >= this.attackCooldown && !this.flicker.active){
-      this.player.flicker.start()
-      this.player.lives -= 1;
-      this.lives.value = this.player.lives
-      
-      this.lives.width -= 54
-    
-      
-   
-    this.attackTimer = 0
-    }
-    
+    this.attack(step)
+    this.animation.gotoAndPlay('attack')
+  }
+  else{
+    this.animation.gotoAndPlay('run')
+  }
+
+  if (this.x > this.player.x){
+    this.flippedX = true
+  }
+  else {
+    this.flippedX = false
   }
    
   if (this.pathTimer >= this.pathCooldown){
@@ -63,6 +61,7 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
     this.pathTimer = 0
   }
    
+
     this.moveEnemy()
 
 }
@@ -85,7 +84,23 @@ weeds.enemy.Enemy.prototype.moveEnemy = function(){
           this.x += distanceX * fraction;
           this.y += distanceY * fraction;
         }
-    
+        
       
       }
+}
+
+weeds.enemy.Enemy.prototype.attack = function(step){
+  this.attackTimer += step
+    
+  if (this.attackTimer >= this.attackCooldown && !this.flicker.active){
+    this.player.flicker.start()
+    this.player.lives -= 1;
+    this.lives.value = this.player.lives
+    
+    this.lives.width -= 54
+  
+    
+ 
+  this.attackTimer = 0
+  }
 }
