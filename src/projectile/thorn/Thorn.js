@@ -15,17 +15,18 @@ weeds.projectile.Thorn.prototype.constructor = weeds.projectile.Thorn;
 weeds.projectile.Thorn.prototype.updateThorn = function () {
     if (this.intersects(this.player)) {
         this.player.lives -= 1
+        this.lives.animation.gotoNextFrame()
         this.player.flicker.start()
         this.player.hurtSound.play()
         this.thorns.removeMember(this)
     }
     console.log(this.bullets)
-    /*this.bullets.forEachMember(bullet => {
+    this.bullets.forEachMember(bullet => {
         if (bullet.intersects(this)) {
             this.thorns.removeMember(this)
         }
 
-    });*/
+    });
 
 }
 

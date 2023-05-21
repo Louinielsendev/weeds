@@ -48,7 +48,7 @@ weeds.spawner.Spawner.prototype.update = function (step) {
             enemy.animation.create('attack', [7, 8, 9, 10, 11, 12, 13, 14], 12, true)
             this.enemys.addMember(enemy)
         }
-        else if (enemyType == 9 || enemyType == 11  ){
+        else if (enemyType == 9 || enemyType == 11 || enemyType == 13 ){
             
             var enemy = new weeds.enemy.Thornbush(x, y, 32, 32, 'thornballfull', this.tilemap, this.player, this.enemys, this.boost, this.score, this.lives, this.killScores, side, this.thorns, this.camera, this.bullets, this.game)
         
