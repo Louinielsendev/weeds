@@ -17,9 +17,6 @@ weeds.projectile.Thorn.prototype.updateThorn = function () {
         this.player.lives -= 1
         this.player.flicker.start()
         this.player.hurtSound.play()
-        this.lives.value = this.player.lives
-
-        this.lives.width -= 54
         this.thorns.removeMember(this)
     }
     console.log(this.bullets)

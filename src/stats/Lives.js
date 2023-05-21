@@ -1,10 +1,10 @@
-weeds.stats.Lives = function(width, heigth, backgroundColor, forgroundColor){
-    rune.ui.Progressbar.call(this, width, heigth, backgroundColor, forgroundColor)
-    this.value = 3
+weeds.stats.Lives = function(x, y, width, height, resource){
+    rune.display.Sprite.call(this, x, y, width, height, resource)
+   
     
     
 }
 
-weeds.stats.Lives.prototype = Object.create(rune.ui.Progressbar.prototype);
+weeds.stats.Lives.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.stats.Lives.prototype.constructor = weeds.stats.Lives;
 

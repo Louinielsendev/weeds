@@ -37,7 +37,7 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
     this.score.value += this.value
     this.score.updateScore()
    
-    var randomNumber = Math.floor(Math.random() * 12)
+    var randomNumber = Math.floor(Math.random() * 8)
     if (randomNumber == 7){
       var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
       boost.animation.create('idle', [0,1], 2, true)
@@ -99,11 +99,8 @@ weeds.enemy.Enemy.prototype.attack = function(step){
   if (this.attackTimer >= this.attackCooldown && !this.player.flicker.active){
     this.player.flicker.start(2000)
     this.player.lives -= 1;
+    this.lives.animation.gotoNextFrame()
     this.player.hurtSound.play()
-    this.lives.value = this.player.lives
-    
-    this.lives.width -= 54
-  
     
  
   this.attackTimer = 0

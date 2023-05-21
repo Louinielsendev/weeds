@@ -220,32 +220,24 @@ weeds.scene.Game.prototype.initScore = function(){
 }
 
 weeds.scene.Game.prototype.initBoostmeter = function(){
-    this.boostmeter = new weeds.stats.Boostmeter(0, 16, '#A020F0', '#ff004d')
-    this.boostmeter.width = 1
-    this.boostmeter.x = 10
-    this.boostmeter.y = 10
+    this.boostmeter = new weeds.stats.Boostmeter(448, 0, 192, 32, 'newboost')
+    this.boostmeter.animation.create('fill', [0,1,2,3,4,5,6,7,8,9,10], 0, true)
+    this.boostmeter.animation.create('full', [11,12,13,14], 8, true)
+    
     this.application.screen.addChild(this.boostmeter)
         
-    var overlay = new rune.display.Graphic(1,1, 164, 16,'boostbar')
-    overlay.x = 10;
-    overlay.y = 10;
-    this.application.screen.addChild(overlay)
+  
   
 
 }
 
 weeds.scene.Game.prototype.initLives = function(){
     
-    this.lives = new weeds.stats.Lives(164, 16, '#0000FF', '#ff004d')
-
-    this.lives.x = 395
-    this.lives.y = 10
+    this.lives = new weeds.stats.Lives(0, 0, 160, 32, 'lifebarnew')
+    this.lives.animation.create('full', [0,1,2,3], 0, true)
     this.application.screen.addChild(this.lives)
         
-    var overlay = new rune.display.Graphic(1,1, 164, 16,'lifebar')
-    overlay.x = 395;
-    overlay.y = 10;
-    this.application.screen.addChild(overlay)
+  
         
 
 }
@@ -268,6 +260,6 @@ weeds.scene.Game.prototype.endGame = function(){
     console.log(this.highscore)
     this.application.screen.removeChild(this.score)
     this.application.screen.removeChild(this.boostmeter)
-    this.application.screen.removeChild(this.lifes)
+    this.application.screen.removeChild(this.lives)
     this.application.scenes.load([new weeds.scene.GameOver(this.highscore)])
 }

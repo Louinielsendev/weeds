@@ -1,10 +1,10 @@
-weeds.stats.Boostmeter = function(width, heigth, backgroundColor, forgroundColor){
-    rune.ui.Progressbar.call(this, width, heigth, backgroundColor, forgroundColor)
+weeds.stats.Boostmeter = function(x, y, width, height, resource){
+    rune.display.Sprite.call(this,x, y, width, height, resource)
     this.value = 0
     
     
 }
 
-weeds.stats.Boostmeter.prototype = Object.create(rune.ui.Progressbar.prototype);
+weeds.stats.Boostmeter.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.stats.Boostmeter.prototype.constructor = weeds.stats.Boostmeter;
 

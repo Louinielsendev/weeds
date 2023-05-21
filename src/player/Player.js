@@ -34,9 +34,13 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
            boost.pickupSound.play()
             this.boost.removeMember(boost)
             this.boostmeter.value += 1
-            if (this.boostmeter.width < 160){
-                this.boostmeter.width += 16.3
+            if (this.boostmeter.value < 10){
+                this.boostmeter.animation.gotoNextFrame()
             }
+            else {
+                this.boostmeter.animation.gotoAndPlay('full')
+            }
+            
           
         }
     })
@@ -137,7 +141,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
         this.overlay.visible = false
     }
 
-    if (this.gamepad.justPressed(7) && this.boostmeter.value >= 1) {
+    if (this.gamepad.justPressed(7) && this.boostmeter.value >= 10) {
         this.overlay.flicker.start();
         this.ultiSound.play()
         this.enemys.forEachMember(enemy => {
@@ -147,9 +151,8 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
                 enemy.life -= 10
 
             }
-           
-            this.boostmeter.width = 1
             this.boostmeter.value = 0
+            this.boostmeter.animation.gotoAndPlay('fill', 0)
             
 
         })
