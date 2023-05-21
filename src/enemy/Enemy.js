@@ -1,4 +1,4 @@
-weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores) {
+weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, game) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.tilemap = tilemap
     this.player = player
@@ -11,11 +11,11 @@ weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, en
     this.pathTimer = 1000
     this.pathCooldown = 200
     this.life = 5
-    this.attackTimer = 700
+    this.attackTimer = 0
     this.attackCooldown = 1000
-    
     this.value = 10
     this.killScores = killScores
+    this.game = game
 }
 
 weeds.enemy.Enemy.prototype = Object.create(rune.display.Sprite.prototype);
@@ -25,15 +25,18 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
   
   this.pathTimer += step;
   if (this.life <= 0){
+    this.game.dieSound.play()
     var text = this.value.toString()
     var killScore = new weeds.stats.KillScore(text)
     killScore.x = this.x
     killScore.y = this.y
     
     this.killScores.addMember(killScore)
+    this.dieSound = null;
     this.enemys.removeMember(this)
     this.score.value += this.value
     this.score.updateScore()
+   
     var randomNumber = Math.floor(Math.random() * 12)
     if (randomNumber == 7){
       var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
@@ -47,6 +50,7 @@ weeds.enemy.Enemy.prototype.updateEnemy = function (step){
   }
   else{
     this.animation.gotoAndPlay('run')
+    this.attackTimer = 0
   }
 
   if (this.x > this.player.x){
@@ -91,10 +95,11 @@ weeds.enemy.Enemy.prototype.moveEnemy = function(){
 
 weeds.enemy.Enemy.prototype.attack = function(step){
   this.attackTimer += step
-    
-  if (this.attackTimer >= this.attackCooldown && !this.flicker.active){
-    this.player.flicker.start()
+    console.log(this.player.flicker.active)
+  if (this.attackTimer >= this.attackCooldown && !this.player.flicker.active){
+    this.player.flicker.start(2000)
     this.player.lives -= 1;
+    this.player.hurtSound.play()
     this.lives.value = this.player.lives
     
     this.lives.width -= 54

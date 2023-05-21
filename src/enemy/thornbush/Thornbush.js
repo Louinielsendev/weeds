@@ -1,6 +1,6 @@
-weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, side, thorns, camera) {
-    weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores);
-    this.life = 5
+weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, side, thorns, camera, bullets, game) {
+    weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, game);
+    this.life = 4
     this.lives = lives
     this.speed = 1.5
     this.side = side
@@ -8,8 +8,8 @@ weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player
     this.thorns = thorns
     this.thornTimer = 0
     this.thornCooldown = 2000
-
     this.camera = camera
+    this.bullets = bullets
 }
 
 weeds.enemy.Thornbush.prototype = Object.create(weeds.enemy.Enemy.prototype);
@@ -22,7 +22,7 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
         var killScore = new weeds.stats.KillScore(text)
         killScore.x = this.x
         killScore.y = this.y
-
+        this.game.dieSound.play()
         this.killScores.addMember(killScore)
         this.enemys.removeMember(this)
         this.score.value += this.value
@@ -86,7 +86,7 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
 
 weeds.enemy.Thornbush.prototype.attack = function () {
     for (var i = 0; i < 4; i++) {
-        var thorn = new weeds.projectile.Thorn(this.centerX, this.centerY, 16, 16, 'thorn', this.player, this.camera, this.thorns, this.lives, i)
+        var thorn = new weeds.projectile.Thorn(this.centerX, this.centerY, 16, 16, 'thorn', this.player, this.camera, this.thorns, this.lives, i, this.bullets)
         thorn.setDirection()
         thorn.animation.create('roll', [0, 1, 2, 3, 4, 5], 12, true)
         this.thorns.addMember(thorn)

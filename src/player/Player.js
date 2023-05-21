@@ -1,4 +1,4 @@
-weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets, enemys, camera, boost, boostmeter, game) {
+weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets, enemys, camera, boost, boostmeter, game, overlay) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.speed = 3
     this.lives = 3
@@ -7,9 +7,13 @@ weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets,
     this.enemys = enemys
     this.camera = camera
     this.game = game
+    this.overlay = overlay
     this.boost = boost
     this.boostmeter = boostmeter
-  
+    this.shootSound = this.application.sounds.sound.get("weapon");
+    this.hurtSound = this.application.sounds.sound.get('hurt');
+    this.dashSound = this.application.sounds.sound.get('dash')
+    this.ultiSound = this.application.sounds.sound.get('ulti')
     this.isDashing = false
     this.dashTimer = 0
     this.dashDuration = 300
@@ -27,7 +31,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
     }
     this.boost.forEachMember(boost => {
         if (boost.intersects(this)) {
-           
+           boost.pickupSound.play()
             this.boost.removeMember(boost)
             this.boostmeter.value += 1
             if (this.boostmeter.width < 160){
@@ -105,6 +109,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
     if (this.isDashing) {
         this.animation.gotoAndPlay('dash')
+        this.dashSound.play()
         this.dashTimer += step;
         if (this.dashTimer >= this.dashDuration) {
             this.isDashing = false;
@@ -125,10 +130,19 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
         this.isDashing = true
     }
+    if (this.overlay.flicker.active){
+        this.overlay.visible = true
+    }
+    else {
+        this.overlay.visible = false
+    }
 
-    if (this.gamepad.justPressed(7) && this.boostmeter.value >= 10) {
+    if (this.gamepad.justPressed(7) && this.boostmeter.value >= 1) {
+        this.overlay.flicker.start();
+        this.ultiSound.play()
         this.enemys.forEachMember(enemy => {
-            
+           
+           
             if (this.camera.viewport.intersects(enemy)) {
                 enemy.life -= 10
 
@@ -145,6 +159,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 }
 
 weeds.player.Player.prototype.shot = function (radians) {
+    this.shootSound.play()
     var bullet = new weeds.projectile.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
     this.bullets.addMember(bullet)
 }

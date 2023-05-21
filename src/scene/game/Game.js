@@ -21,6 +21,7 @@ weeds.scene.Game = function(highscore) {
     this.thorns = null;
     this.enemys = null;
     this.camera = null
+    this.overlay = null
     this.spawner = null;
     this.score = null;
     this.boost = null;
@@ -29,6 +30,9 @@ weeds.scene.Game = function(highscore) {
     this.gameOver = null;
     this.killScores = null
     this.highscore = highscore
+    this.themeSong = null
+    this.dieSound = null
+    this.fountain = null
 
     
     //--------------------------------------------------------------------------
@@ -72,8 +76,10 @@ weeds.scene.Game.prototype.init = function() {
     this.initPlayer();
     this.initTilemap();
     this.initSpawner();
-    
-    
+    this.initFountain();
+    this.themeSong = this.application.sounds.sound.get("thememusic");
+    this.dieSound = this.application.sounds.sound.get('die', false)
+  
     
     
 };
@@ -103,6 +109,10 @@ weeds.scene.Game.prototype.update = function(step) {
                 this.thorns.removeMember(thorn)
                 
             }
+            if (this.fountain.intersects(thorn)){
+                this.thorns.removeMember(thorn)
+                
+            }
         })
         this.killScores.forEachMember(killScore => {
            killScore.updateKillScore()
@@ -113,11 +123,13 @@ weeds.scene.Game.prototype.update = function(step) {
            console.log(this.killScores)
         })
         this.enemys.forEachMember(enemy => {
+           
             enemy.updateEnemy(step)
             this.stage.map.m_bufferA.hitTestAndSeparate(enemy, this)
         })
         this.spawner.update(step);
         this.player.updatePlayer(step)
+     
     }
     
 
@@ -144,7 +156,7 @@ weeds.scene.Game.prototype.dispose = function() {
 };
 
 weeds.scene.Game.prototype.initBackground = function() {
-    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v4')
+    this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v5')
    
     this.stage.addChild(this.background)
 }
@@ -164,7 +176,7 @@ weeds.scene.Game.prototype.initGroups = function(){
 
 
 weeds.scene.Game.prototype.initPlayer = function() {
-    this.player = new weeds.player.Player(500, 500, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this)
+    this.player = new weeds.player.Player(448, 600, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.player.animation.create('run', [0,1,2,3,4,5], 6, true)
     this.player.animation.create('dash', [6,7,8,9,10,11], 6, true )
     this.stage.addChild(this.player)
@@ -175,6 +187,12 @@ weeds.scene.Game.prototype.initPlayer = function() {
 weeds.scene.Game.prototype.initCamera = function() {
     this.camera = this.cameras.getCameraAt(0)
     this.camera.bounderies = new rune.geom.Rectangle(0, 0, 1024, 1024)
+    this.overlay = new rune.display.DisplayObject(0, 0, this.camera.width, this.camera.height)
+    this.overlay.backgroundColor = '#A020F0'
+    this.overlay.alpha = .6
+    this.camera.addChild(this.overlay)
+    this.overlay.visible = false
+    
   
     
 }
@@ -187,7 +205,7 @@ weeds.scene.Game.prototype.initTilemap = function(){
 }
 
 weeds.scene.Game.prototype.initSpawner = function(){
-    this.spawner = new weeds.spawner.Spawner(this.enemys, this.stage.map, this.player, this.boost, this.score, this.lives, this.thorns, this.camera, this.killScores)
+    this.spawner = new weeds.spawner.Spawner(this.enemys, this.stage.map, this.player, this.boost, this.score, this.lives, this.thorns, this.camera, this.killScores,this.bullets, this)
     
 }
 
@@ -232,10 +250,15 @@ weeds.scene.Game.prototype.initLives = function(){
 
 }
 
-
+weeds.scene.Game.prototype.initFountain = function(){
+    this.fountain = new rune.display.Sprite(448, 448, 128, 96, 'fountain')
+    this.fountain.animation.create('run', [0,1,2,3], 6, true)
+    this.stage.addChild(this.fountain)
+}
 
 
 weeds.scene.Game.prototype.endGame = function(){
+    
     if(this.highscore.test(this.score.value) >= 0){
         
         this.highscore.send(this.score.value, 'loui', 0)

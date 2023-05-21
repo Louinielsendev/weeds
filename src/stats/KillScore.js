@@ -9,5 +9,5 @@ weeds.stats.KillScore.prototype.constructor = weeds.stats.KillScore;
 
 weeds.stats.KillScore.prototype.updateKillScore = function(){
     this.y -= 3
-    this.alpha -= .1
+    this.alpha -= .05
 }

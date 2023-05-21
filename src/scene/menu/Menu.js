@@ -25,6 +25,7 @@ weeds.scene.Menu = function () {
      * Calls the constructor method of the super class.
      */
     rune.scene.Scene.call(this);
+   
 };
 
 //------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ weeds.scene.Menu.prototype.init = function () {
    
     this.initMenu();
     this.initGamepad();
-    console.log(this.highscore)
+    
     var text = new rune.text.BitmapField('Weeds')
     text.autoSize = true
     text.center = this.application.screen.center;
