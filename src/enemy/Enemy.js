@@ -97,7 +97,7 @@ weeds.enemy.Enemy.prototype.attack = function(step){
   this.attackTimer += step
     console.log(this.player.flicker.active)
   if (this.attackTimer >= this.attackCooldown && !this.player.flicker.active){
-    this.player.flicker.start(2000)
+    this.player.flicker.start(1000)
     this.player.lives -= 1;
     this.lives.animation.gotoNextFrame()
     this.player.hurtSound.play()
