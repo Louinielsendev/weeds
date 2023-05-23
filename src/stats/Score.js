@@ -1,6 +1,6 @@
 weeds.stats.Score = function(){
     rune.text.BitmapField.call(this, "00", "");
-    this.value = 0
+    this.value = 20000
     
 }
 

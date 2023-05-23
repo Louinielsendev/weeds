@@ -13,10 +13,11 @@
  * 
  * Game scene.
  */
-weeds.scene.GameOver = function (highscore) {
+weeds.scene.GameOver = function (highscore, score) {
     this.highscore = highscore
     this.menu = null
     this.gamepad = null;
+    this.score = score;
     
     //--------------------------------------------------------------------------
     // Super call
@@ -51,11 +52,19 @@ weeds.scene.GameOver.prototype.init = function () {
     this.initMenu();
     this.initGamepad();
 
-    var text = new rune.text.BitmapField('Game Over')
-    text.autoSize = true
-    text.center = this.application.screen.center;
-    this.stage.addChild(text)
 
+    var gameoverText = new rune.text.BitmapField('Game Over!')
+    gameoverText.autoSize = true
+    gameoverText.center = this.application.screen.center;
+    gameoverText.y = 50
+    this.stage.addChild(gameoverText)
+    
+    var scoreText = this.score.toString();
+    var score = new rune.text.BitmapField('Your Score: ' + scoreText)
+    score.center = this.application.screen.center;
+    score.y = 100
+    score.x += 30
+    this.stage.addChild(score)
 
 
 
@@ -103,7 +112,8 @@ weeds.scene.GameOver.prototype.dispose = function () {
 
 weeds.scene.GameOver.prototype.initMenu = function () {
     this.menu = new rune.ui.VTMenu()
-    this.menu.y = 100
+    this.menu.y = 170
+    this.menu.x = 250
     this.menu.add('Play again')
     this.menu.add('Back to main menu')
     

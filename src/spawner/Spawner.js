@@ -1,7 +1,7 @@
 weeds.spawner.Spawner = function (enemys, tilemap, player, boost, score, lives, thorns, camera, killScores, bullets, game) {
     this.enemys = enemys
     this.level = 1
-    this.spawnCooldown = 900
+    this.spawnCooldown = 800
     this.spawnDuration = 1000
     this.tilemap = tilemap
     this.player = player
@@ -67,5 +67,5 @@ weeds.spawner.Spawner.prototype.update = function (step) {
     }
     var fraction = step / 1000
     this.spawnCooldown -= fraction
-  console.log(this.spawnCooldown)
+  
 }

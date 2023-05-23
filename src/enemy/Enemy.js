@@ -22,27 +22,15 @@ weeds.enemy.Enemy.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.enemy.Enemy.prototype.constructor = weeds.enemy.Enemy;
 
 weeds.enemy.Enemy.prototype.updateEnemy = function (step){
-  
+  if (this.player.lives <= 0){
+        
+    
+    return
+ }
   this.pathTimer += step;
   if (this.life <= 0){
-    this.game.dieSound.play()
-    var text = this.value.toString()
-    var killScore = new weeds.stats.KillScore(text)
-    killScore.x = this.x
-    killScore.y = this.y
+    this.death()
     
-    this.killScores.addMember(killScore)
-    this.dieSound = null;
-    this.enemys.removeMember(this)
-    this.score.value += this.value
-    this.score.updateScore()
-   
-    var randomNumber = Math.floor(Math.random() * 8)
-    if (randomNumber == 7){
-      var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
-      boost.animation.create('idle', [0,1], 2, true)
-      this.boost.addMember(boost)
-    }
   }
   if (this.intersects(this.player)){
     this.attack(step)
@@ -106,3 +94,40 @@ weeds.enemy.Enemy.prototype.attack = function(step){
   this.attackTimer = 0
   }
 }
+
+weeds.enemy.Enemy.prototype.death = function(){
+  console.log(this.game.timers)
+   
+  this.game.dieSound.play()
+  var text = this.value.toString()
+  var killScore = new weeds.stats.KillScore(text)
+  killScore.x = this.x
+  killScore.y = this.y
+  
+  this.killScores.addMember(killScore)
+  this.dieSound = null;
+  this.enemys.removeMember(this)
+  this.score.value += this.value
+  this.score.updateScore()
+ 
+  var randomNumber = Math.floor(Math.random() * 8)
+  if (randomNumber == 7){
+    var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
+    boost.animation.create('idle', [0,1], 2, true)
+    this.boost.addMember(boost)
+  }
+  var smoke =  new rune.display.Sprite(this.x, this.y, 32, 32, 'smoke');
+  smoke.center = this.center
+  smoke.animation.create('idle', [0,1,2,3], 12, true)
+  this.game.timers.create({
+    duration: 500,
+    onStart: function(){
+
+      this.stage.addChild(smoke)
+    },
+    onComplete: function(){
+      this.stage.removeChild(smoke)
+    }
+  })
+ 
+  }

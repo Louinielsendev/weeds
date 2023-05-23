@@ -33,6 +33,7 @@ weeds.scene.Game = function (highscore) {
     this.themeSong = null
     this.dieSound = null
     this.fountain = null
+ 
 
 
     //--------------------------------------------------------------------------
@@ -77,7 +78,9 @@ weeds.scene.Game.prototype.init = function () {
     this.initTilemap();
     this.initSpawner();
     this.initFountain();
-    this.themeSong = this.application.sounds.sound.get("thememusic");
+    this.themeSong = this.application.sounds.music.get("thememusic");
+    this.themeSong.play()
+    this.themeSong.loop = true
     this.dieSound = this.application.sounds.sound.get('die', false)
 
 
@@ -120,7 +123,7 @@ weeds.scene.Game.prototype.update = function (step) {
                 this.killScores.removeMember(killScore)
 
             }
-            console.log(this.killScores)
+           
         })
         this.enemys.forEachMember(enemy => {
 
@@ -176,9 +179,11 @@ weeds.scene.Game.prototype.initGroups = function () {
 
 
 weeds.scene.Game.prototype.initPlayer = function () {
-    this.player = new weeds.player.Player(448, 600, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
+    this.player = new weeds.player.Player(448, 600, 24, 30, 'fullgardener', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay, this.thorns)
+    this.player.animation.create('idle', [18, 19], 6, true)
     this.player.animation.create('run', [0, 1, 2, 3, 4, 5], 6, true)
     this.player.animation.create('dash', [6, 7, 8, 9, 10, 11], 6, true)
+    this.player.animation.create('death', [12,13,14,15], 1.8, true)
     this.stage.addChild(this.player)
     this.camera.targets.add(this.player)
 
@@ -250,24 +255,26 @@ weeds.scene.Game.prototype.initFountain = function () {
 
 
 weeds.scene.Game.prototype.endGame = function () {
+    
     this.timers.create({
         duration: 2000,
         onStart: function () {
-            if (this.highscore.test(this.score.value) >= 0) {
-               
-                this.highscore.send(this.score.value, 'loui', 0)
-
-            }
-            var text = new rune.text.BitmapField('You died!')
-            text.autoSize = true
-            text.center = this.application.screen.center;
-            this.stage.addChild(text)
+            
+           
+        },
+        onComplete: function () {
+            
             this.application.screen.removeChild(this.score)
             this.application.screen.removeChild(this.boostmeter)
             this.application.screen.removeChild(this.lives)
-        },
-        onComplete: function () {
-            this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score.value)])
+            if (this.highscore.test(this.score.value) >= 0) {
+               this.application.scenes.load([new weeds.scene.SetHighscore(this.highscore, this.score.value)])
+                
+
+            } else {
+                this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score.value)])
+            }
+           
         }
 
     },)

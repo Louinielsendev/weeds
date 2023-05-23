@@ -20,12 +20,12 @@ weeds.projectile.Thorn.prototype.updateThorn = function () {
         this.player.hurtSound.play()
         this.thorns.removeMember(this)
     }
-    console.log(this.bullets)
+    
     this.bullets.forEachMember(bullet => {
         if (bullet.intersects(this)) {
             this.thorns.removeMember(this)
         }
-
+        
     });
 
 }

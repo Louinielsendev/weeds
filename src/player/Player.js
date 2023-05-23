@@ -1,4 +1,4 @@
-weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets, enemys, camera, boost, boostmeter, game, overlay) {
+weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets, enemys, camera, boost, boostmeter, game, overlay, thorns) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.speed = 3
     this.lives = 3
@@ -8,26 +8,34 @@ weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets,
     this.camera = camera
     this.game = game
     this.overlay = overlay
+    this.thorns = thorns
     this.boost = boost
     this.boostmeter = boostmeter
     this.shootSound = this.application.sounds.sound.get("weapon");
     this.hurtSound = this.application.sounds.sound.get('hurt');
     this.dashSound = this.application.sounds.sound.get('dash')
     this.ultiSound = this.application.sounds.sound.get('ulti')
+    
     this.isDashing = false
     this.dashTimer = 0
     this.dashDuration = 300
     this.bulletTimer = 0
     this.bulletCooldown = 150
+    this.walking = false
 }
 
 weeds.player.Player.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.player.Player.prototype.constructor = weeds.player.Player;
 
 weeds.player.Player.prototype.updatePlayer = function (step) {
+    var walking = false
+    
+    
     if (this.lives <= 0){
-        
+    this.animation.gotoAndPlay('death')
+    
        this.game.endGame()
+       return
     }
     this.boost.forEachMember(boost => {
         if (boost.intersects(this)) {
@@ -44,51 +52,40 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
           
         }
     })
-
-    if (this.gamepad.stickLeftLeft && this.x > 66) {
+    
+    if (this.gamepad.stickLeftLeft && this.x > 66 || this.keyboard.pressed('a') && this.x > 66) {
+        walking = true
         this.x -= this.speed
         this.flippedX = true
-        this.animation.gotoAndPlay('run')
+       
     }
 
 
-    if (this.gamepad.stickLeftRight && this.x < 910) {
+    if (this.gamepad.stickLeftRight && this.x < 910 || this.keyboard.pressed('d') && this.x < 910) {
+        walking = true
         this.x += this.speed
         this.flippedX = false
         this.animation.gotoAndPlay('run')
     }
-    if (this.gamepad.stickLeftUp && this.y > 66) {
+    if (this.gamepad.stickLeftUp && this.y > 66 || this.keyboard.pressed('w') && this.y > 66) {
+        walking = true
         this.y -= this.speed
         this.animation.gotoAndPlay('run')
     }
-    if (this.gamepad.stickLeftDown && this.y < 915) {
+    if (this.gamepad.stickLeftDown && this.y < 915 || this.keyboard.pressed('s') && this.y < 915) {
+        walking = true
         this.y += this.speed
         this.animation.gotoAndPlay('run')
     }
 
-    if (this.keyboard.pressed('d') && this.x < 950) {
-
-        this.x += this.speed
-        this.flippedX = false
-        this.direction = 'right'
+ 
 
 
+    if (!walking){
+        this.animation.gotoAndPlay('idle')
     }
-    if (this.keyboard.pressed('a') && this.x > 50) {
-        this.x -= this.speed
-        this.flippedX = true
-        this.direction = 'left'
-
-    }
-    if (this.keyboard.pressed('w') && this.y > 50) {
-        this.y -= this.speed
-        this.direction = 'up'
-
-    }
-    if (this.keyboard.pressed('s') && this.y < 950) {
-        this.y += this.speed
-        this.direction = 'down'
-
+    else {
+        this.animation.gotoAndPlay('run')
     }
 
 
@@ -111,7 +108,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
     }
 
-    if (this.isDashing) {
+    if (this.isDashing ) {
         this.animation.gotoAndPlay('dash')
         this.dashSound.play()
         this.dashTimer += step;
@@ -142,8 +139,26 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
     }
 
     if (this.gamepad.justPressed(7) && this.boostmeter.value >= 10) {
-        this.overlay.flicker.start();
+        this.ultimate()
+    }
+
+}
+
+weeds.player.Player.prototype.shot = function (radians) {
+    this.shootSound.play()
+    var bullet = new weeds.projectile.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
+    this.bullets.addMember(bullet)
+}
+
+weeds.player.Player.prototype.ultimate = function(){
+    this.overlay.flicker.start();
         this.ultiSound.play()
+        this.thorns.forEachMember(thorn =>{
+            if (this.camera.viewport.intersects(thorn)) {
+                this.thorns.removeMember(thorn)
+
+            }
+        })
         this.enemys.forEachMember(enemy => {
            
            
@@ -157,13 +172,5 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
         })
 
-    }
-
-}
-
-weeds.player.Player.prototype.shot = function (radians) {
-    this.shootSound.play()
-    var bullet = new weeds.projectile.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
-    this.bullets.addMember(bullet)
 }
 

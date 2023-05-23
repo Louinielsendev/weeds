@@ -12,6 +12,7 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/scene/menu/Menu.js" \
 --js "./../../src/scene/highscore/Highscore.js" \
+--js "./../../src/scene/setHighscore/setHighscore.js" \
 --js "./../../src/scene/tutorial/Turorial.js" \
 --js "./../../src/scene/gameOver/GameOver.js" \
 --js "./../../src/player/Player.js" \

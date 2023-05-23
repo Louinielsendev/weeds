@@ -17,6 +17,10 @@ weeds.enemy.Thornbush.prototype.constructor = weeds.enemy.Thornbush;
 
 weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
     this.thornTimer += step;
+    if (this.player.lives <= 0) {
+
+        return
+    }
     if (this.life <= 0) {
         var text = this.value.toString()
         var killScore = new weeds.stats.KillScore(text)
@@ -33,8 +37,20 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
             boost.animation.create('idle', [0, 1], 2, true)
             this.boost.addMember(boost)
         }
+        var smoke = new rune.display.Sprite(this.x, this.y, 32, 32, 'smoke');
+        smoke.animation.create('idle', [0, 1, 2, 3], 12, true)
+        this.game.timers.create({
+            duration: 500,
+            onStart: function () {
+
+                this.stage.addChild(smoke)
+            },
+            onComplete: function () {
+                this.stage.removeChild(smoke)
+            }
+        })
     }
-   
+
 
     switch (this.side) {
 

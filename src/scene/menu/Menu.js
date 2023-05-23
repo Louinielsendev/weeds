@@ -17,6 +17,7 @@ weeds.scene.Menu = function () {
     this.highscore = null
     this.menu = null
     this.gamepad = null;
+    this.titlescreen = null
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -51,11 +52,8 @@ weeds.scene.Menu.prototype.init = function () {
    
     this.initMenu();
     this.initGamepad();
+    this.initTitlescreen();
     
-    var text = new rune.text.BitmapField('Weeds')
-    text.autoSize = true
-    text.center = this.application.screen.center;
-    this.stage.addChild(text)
 
 
 
@@ -104,7 +102,8 @@ weeds.scene.Menu.prototype.dispose = function () {
 
 weeds.scene.Menu.prototype.initMenu = function () {
     this.menu = new rune.ui.VTMenu()
-    this.menu.y = 100
+    this.menu.y = 170
+    this.menu.x = 250
     this.menu.add('Play')
     this.menu.add('How to play')
     this.menu.add('Highscore')
@@ -129,4 +128,9 @@ weeds.scene.Menu.prototype.initMenu = function () {
 
 weeds.scene.Menu.prototype.initGamepad = function () {
     this.gamepad = this.gamepads.get(0)
+}
+
+weeds.scene.Menu.prototype.initTitlescreen = function(){
+    this.titlescreen = new rune.display.Graphic(0, 0, 640, 360, 'titlescreen')
+    this.stage.addChild(this.titlescreen)
 }
