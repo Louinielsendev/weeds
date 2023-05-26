@@ -71,15 +71,15 @@ weeds.scene.Menu.prototype.init = function () {
  */
 weeds.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    if (this.gamepad.justPressed(13)) {
+    if (this.gamepad.justPressed(13) || this.keyboard.justPressed('DOWN')) {
         this.menu.down()
 
     }
 
-    if (this.gamepad.justPressed(12)) {
+    if (this.gamepad.justPressed(12) || this.keyboard.justPressed('UP')) {
         this.menu.up()
     }
-    if (this.gamepad.justPressed(0)) {
+    if (this.gamepad.justPressed(0) || this.keyboard.justPressed('ENTER')) {
         this.menu.select()
       
     }

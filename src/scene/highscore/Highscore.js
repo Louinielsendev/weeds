@@ -65,7 +65,7 @@ weeds.scene.Highscore.prototype.init = function () {
 weeds.scene.Highscore.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
    
-if(this.gamepad.justPressed(1)){
+if(this.gamepad.justPressed(1) || this.keyboard.justPressed('ESCAPE')){
     this.application.scenes.load([new weeds.scene.Menu])
 }
 
