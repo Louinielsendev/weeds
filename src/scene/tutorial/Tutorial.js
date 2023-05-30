@@ -93,7 +93,7 @@ weeds.scene.Tutorial.prototype.dispose = function () {
  *
  */
 weeds.scene.Tutorial.prototype.initRunning = function() {
-    this.running = new weeds.player.Player(190, 280, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
+    this.running = new weeds.player.Player(190, 280, 24, 30, 'fullgardener', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.running.animation.create('run', [0,1,2,3,4,5], 6, true)
     var text = new rune.text.BitmapField('Run')
     text.y = 320
@@ -126,7 +126,7 @@ weeds.scene.Tutorial.prototype.initShoot = function() {
  *
  */
 weeds.scene.Tutorial.prototype.initDash = function() {
-    this.dash = new weeds.player.Player(470, 280, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
+    this.dash = new weeds.player.Player(470, 280, 24, 30, 'fullgardener', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.dash.animation.create('dash', [6,7,8,9,10,11], 6, true)
     var text = new rune.text.BitmapField('Dash')
     text.y = 320

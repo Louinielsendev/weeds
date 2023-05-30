@@ -314,7 +314,7 @@ weeds.scene.Game.prototype.endGame = function () {
            
         }
 
-    },)
+    })
 
 
 

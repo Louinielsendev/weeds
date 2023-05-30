@@ -138,7 +138,7 @@ weeds.scene.GameOver.prototype.initMenu = function () {
             case 0:
                 this.titlesong.fade(0, 1000)
                 this.titlesong.stop()
-                this.application.scenes.load([new weeds.scene.Game(this.highscore, this.titlesong, this.gamepad,)])
+                this.application.scenes.load([new weeds.scene.Game(this.highscore, this.titlesong, this.gamepad)])
                 break;
             case 1:
                 this.application.scenes.load([new weeds.scene.Menu()])

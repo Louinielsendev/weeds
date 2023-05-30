@@ -22,6 +22,7 @@ weeds.scene.SetHighscore = function (highscore, score, titlesong, gamepad) {
     this.firstLetter = null
     this.secondLetter = null
     this.thirdLetter = null
+    this.highscoresound = null
     this.letters = []
     this.selectedIndex = 0
     this.alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -68,6 +69,8 @@ weeds.scene.SetHighscore.prototype.init = function () {
     name.y = 150
     this.stage.addChild(name)
     this.initNameSelector()
+    this.highscoresound = this.application.sounds.sound.get('newhighscore')
+    this.highscoresound.play()
 
 };
 

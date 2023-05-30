@@ -13,7 +13,7 @@ npx google-closure-compiler \
 --js "./../../src/scene/menu/Menu.js" \
 --js "./../../src/scene/highscore/Highscore.js" \
 --js "./../../src/scene/setHighscore/setHighscore.js" \
---js "./../../src/scene/tutorial/Turorial.js" \
+--js "./../../src/scene/tutorial/Tutorial.js" \
 --js "./../../src/scene/gameOver/GameOver.js" \
 --js "./../../src/player/Player.js" \
 --js "./../../src/projectile/bullet/Bullet.js" \
@@ -26,7 +26,7 @@ npx google-closure-compiler \
 --js "./../../src/enemy/Enemy.js" \
 --js "./../../src/enemy/bigplant/Bigplant.js" \
 --js "./../../src/enemy/smallplant/Smallplant.js" \
---js "./../../src/enemy/smallplant/Thornbush.js" \
+--js "./../../src/enemy/thornbush/Thornbush.js" \
 --js "./../../src/spawner/Spawner.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \

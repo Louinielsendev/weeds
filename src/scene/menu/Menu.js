@@ -61,6 +61,7 @@ weeds.scene.Menu.prototype.init = function () {
     this.selectsound = this.application.sounds.sound.get('selectsound', false);
     this.titlesong = this.application.sounds.master.get('titlesong')
     this.titlesong.play()
+    this.titlesong.loop = true
 
 
 
