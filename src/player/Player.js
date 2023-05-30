@@ -1,3 +1,7 @@
+/**
+ * Class for the player
+ * @param {number, number, number, number, string, object, object, object, object, object, object, object, object, object}  
+ */
 weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets, enemys, camera, boost, boostmeter, game, overlay, thorns) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.speed = 3
@@ -15,7 +19,6 @@ weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets,
     this.hurtSound = this.application.sounds.sound.get('hurt');
     this.dashSound = this.application.sounds.sound.get('dash')
     this.ultiSound = this.application.sounds.sound.get('ulti')
-    
     this.isDashing = false
     this.dashTimer = 0
     this.dashDuration = 300
@@ -27,6 +30,11 @@ weeds.player.Player = function (x, y, width, height, resource, gamepad, bullets,
 weeds.player.Player.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.player.Player.prototype.constructor = weeds.player.Player;
 
+
+/**
+ * Function that updates the player every tick
+ * @param {number}  
+ */
 weeds.player.Player.prototype.updatePlayer = function (step) {
     var walking = false
     
@@ -109,22 +117,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
     }
 
     if (this.isDashing ) {
-        this.animation.gotoAndPlay('dash')
-        this.dashSound.play()
-        this.dashTimer += step;
-        if (this.dashTimer >= this.dashDuration) {
-            this.isDashing = false;
-            this.speed = 3
-            this.dashTimer = 0
-        }
-        else if (this.gamepad.stickLeftDown && this.gamepad.stickLeftLeft || this.gamepad.stickLeftDown && this.gamepad.stickLeftRight || this.gamepad.stickLeftUp && this.gamepad.stickLeftRight || this.gamepad.stickLeftUp && this.gamepad.stickLeftLeft) {
-            this.speed = 6
-        }
-        else {
-            this.speed = 8;
-        }
-
-
+       this.dash(step)
     }
 
     if (this.gamepad.justPressed(0)) {
@@ -144,7 +137,12 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
 
 }
 
+/**
+ * Funktion that creates a new bullet object everytime the player shoots
+ * @param {number}  
+ */
 weeds.player.Player.prototype.shot = function (radians) {
+    console.log(typeof radians)
     this.shootSound.play()
     var bullet = new weeds.projectile.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
     this.bullets.addMember(bullet)
@@ -174,3 +172,25 @@ weeds.player.Player.prototype.ultimate = function(){
 
 }
 
+/**
+ * Function for player dash
+ * @param {number}  
+ */
+weeds.player.Player.prototype.dash = function(step){
+    this.animation.gotoAndPlay('dash')
+    this.dashSound.play()
+    this.dashTimer += step;
+    if (this.dashTimer >= this.dashDuration) {
+        this.isDashing = false;
+        this.speed = 3
+        this.dashTimer = 0
+    }
+    else if (this.gamepad.stickLeftDown && this.gamepad.stickLeftLeft || this.gamepad.stickLeftDown && this.gamepad.stickLeftRight || this.gamepad.stickLeftUp && this.gamepad.stickLeftRight || this.gamepad.stickLeftUp && this.gamepad.stickLeftLeft) {
+        this.speed = 6
+    }
+    else {
+        this.speed = 8;
+    }
+
+
+}

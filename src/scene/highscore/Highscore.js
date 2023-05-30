@@ -10,12 +10,12 @@
  *
  * @class
  * @classdesc
- * 
- * Game scene.
+ * @param {object, object} 
+ * Highscore scene.
  */
-weeds.scene.Highscore = function (highscore) {
-    this.gamepad = null;
+weeds.scene.Highscore = function (highscore, gamepad) {
     this.highscore = highscore
+    this.gamepad = gamepad;
     this.highscoreList = null
     //--------------------------------------------------------------------------
     // Super call
@@ -46,11 +46,11 @@ weeds.scene.Highscore.prototype.constructor = weeds.scene.Highscore;
  */
 weeds.scene.Highscore.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-    this.initGamepad();
     this.initHighscoreList();
     var text = new rune.text.BitmapField('Highscore')
     text.autoSize = true
-    text.center = this.application.screen.center;
+    text.x = 290
+    text.y = 50
     this.stage.addChild(text)
 };
 
@@ -85,14 +85,14 @@ weeds.scene.Highscore.prototype.dispose = function () {
 };
 
 
-weeds.scene.Highscore.prototype.initGamepad = function () {
-    this.gamepad = this.gamepads.get(0)
-}
-
+/**
+ * Function that initilizes the highscore list
+ *
+ */
 weeds.scene.Highscore.prototype.initHighscoreList = function(){
     this.highscoreList = new rune.ui.VTList()
-    this.highscoreList.y = 100
-    this.highscoreList.x = 50
+    this.highscoreList.y = 150
+    this.highscoreList.x = 290
     for(var i = 0; i < this.highscore.m_data[0].length; i++){
         console.log(this.highscore)
         var text = this.highscore.m_data[0][i].name + ' ' + this.highscore.m_data[0][i].score

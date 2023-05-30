@@ -1,3 +1,7 @@
+/**
+ * Class for the lives
+ * @param {number, number, number, number, string}  
+ */
 weeds.stats.Lives = function(x, y, width, height, resource){
     rune.display.Sprite.call(this, x, y, width, height, resource)
    

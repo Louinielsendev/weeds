@@ -1,3 +1,7 @@
+/**
+ * Class for the boostmeter
+ * @param {number, number, number, number, string}  
+ */
 weeds.stats.Boostmeter = function(x, y, width, height, resource){
     rune.display.Sprite.call(this,x, y, width, height, resource)
     this.value = 0

@@ -10,13 +10,14 @@
  *
  * @class
  * @classdesc
- * 
- * Game scene.
+ * @param {object, object, object, object} 
+ * SetHighscore scene.
  */
-weeds.scene.SetHighscore = function (highscore, score) {
+weeds.scene.SetHighscore = function (highscore, score, titlesong, gamepad) {
     this.gamepad = null
     this.highscore = highscore
-    this.gamepad = null;
+    this.titlesong = titlesong;
+    this.gamepad = gamepad;
     this.score = score;
     this.firstLetter = null
     this.secondLetter = null
@@ -62,17 +63,11 @@ weeds.scene.SetHighscore.prototype.init = function () {
     highscoreText.x -= 20
     highscoreText.width = 200
     this.stage.addChild(highscoreText)
-    
-
-    
     var name = new rune.text.BitmapField('PLEASE ENTER YOUR NAME')
     name.center = this.application.screen.center;
     name.y = 150
-    
     this.stage.addChild(name)
-
     this.initNameSelector()
-    this.initGamepad()
 
 };
 
@@ -121,7 +116,7 @@ weeds.scene.SetHighscore.prototype.update = function (step) {
 
         }
         this.highscore.send(this.score, name, 0)
-        this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score)])
+        this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score, this.titlesong, this.gamepad)])
     }
     
 
@@ -140,6 +135,10 @@ weeds.scene.SetHighscore.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
 
+/**
+ * Function that initilizes the three letters for choosing name
+ *
+ */
 weeds.scene.SetHighscore.prototype.initNameSelector = function() {
     for (var i = 0; i < 3; i++){
         var letter = new rune.display.Sprite((40 * i + 250 ),200,32,32, 'thealphabet')
@@ -149,8 +148,4 @@ weeds.scene.SetHighscore.prototype.initNameSelector = function() {
         this.letters.push(letter);
         
     }
-}
-
-weeds.scene.SetHighscore.prototype.initGamepad = function () {
-    this.gamepad = this.gamepads.get(0)
 }

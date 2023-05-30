@@ -10,13 +10,13 @@
  *
  * @class
  * @classdesc
- * 
+ * @param {object, object, object} 
  * Game scene.
  */
-weeds.scene.Game = function (highscore) {
+weeds.scene.Game = function (highscore, titlesong, gamepad) {
     this.background = null
     this.player = null;
-    this.gamepad = null;
+    this.gamepad = gamepad;
     this.bullets = null;
     this.thorns = null;
     this.enemys = null;
@@ -30,6 +30,7 @@ weeds.scene.Game = function (highscore) {
     this.gameOver = null;
     this.killScores = null
     this.highscore = highscore
+    this.titlesong = titlesong
     this.themeSong = null
     this.dieSound = null
     this.fountain = null
@@ -68,7 +69,6 @@ weeds.scene.Game.prototype.init = function () {
 
 
     this.initBackground();
-    this.initGamepad();
     this.initGroups()
     this.initCamera();
     this.initScore();
@@ -158,16 +158,21 @@ weeds.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
 
+
+/**
+ * Function that initilizes the background of the game
+ *
+ */
 weeds.scene.Game.prototype.initBackground = function () {
     this.background = new rune.display.Graphic(0, 0, 1024, 1024, 'garden1024v5')
 
     this.stage.addChild(this.background)
 }
 
-weeds.scene.Game.prototype.initGamepad = function () {
-    this.gamepad = this.gamepads.get(0)
-}
-
+/**
+ * Function that initilizes all the groups of the game
+ *
+ */
 weeds.scene.Game.prototype.initGroups = function () {
     this.bullets = this.groups.create(this.stage)
     this.enemys = this.groups.create(this.stage)
@@ -177,7 +182,10 @@ weeds.scene.Game.prototype.initGroups = function () {
 }
 
 
-
+/**
+ * Function that initilizes the player
+ *
+ */
 weeds.scene.Game.prototype.initPlayer = function () {
     this.player = new weeds.player.Player(448, 600, 24, 30, 'fullgardener', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay, this.thorns)
     this.player.animation.create('idle', [18, 19], 6, true)
@@ -189,6 +197,11 @@ weeds.scene.Game.prototype.initPlayer = function () {
 
 }
 
+
+/**
+ * Function that initilizes the camera
+ *
+ */
 weeds.scene.Game.prototype.initCamera = function () {
     this.camera = this.cameras.getCameraAt(0)
     this.camera.bounderies = new rune.geom.Rectangle(0, 0, 1024, 1024)
@@ -203,18 +216,29 @@ weeds.scene.Game.prototype.initCamera = function () {
 }
 
 
+/**
+ * Function that initilizes the tilemap
+ *
+ */
 weeds.scene.Game.prototype.initTilemap = function () {
     this.stage.map.load('tilemap')
 
 
 }
 
+/**
+ * Function that initilizes the spawner that spawns enemies
+ *
+ */
 weeds.scene.Game.prototype.initSpawner = function () {
     this.spawner = new weeds.spawner.Spawner(this.enemys, this.stage.map, this.player, this.boost, this.score, this.lives, this.thorns, this.camera, this.killScores, this.bullets, this)
 
 }
 
-
+/**
+ * Function that initilizes the score of the game
+ *
+ */
 weeds.scene.Game.prototype.initScore = function () {
     this.score = new weeds.stats.Score()
     this.score.updateScore()
@@ -224,6 +248,10 @@ weeds.scene.Game.prototype.initScore = function () {
 
 }
 
+/**
+ * Function that initilizes the meter for boost
+ *
+ */
 weeds.scene.Game.prototype.initBoostmeter = function () {
     this.boostmeter = new weeds.stats.Boostmeter(448, 0, 192, 32, 'newboost')
     this.boostmeter.animation.create('fill', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0, true)
@@ -236,6 +264,11 @@ weeds.scene.Game.prototype.initBoostmeter = function () {
 
 }
 
+
+/**
+ * Function that initilizes the lives for the player
+ *
+ */
 weeds.scene.Game.prototype.initLives = function () {
 
     this.lives = new weeds.stats.Lives(0, 0, 160, 32, 'lifebarnew')
@@ -247,32 +280,36 @@ weeds.scene.Game.prototype.initLives = function () {
 
 }
 
+/**
+ * Function that initilizes the fountain object 
+ *
+ */
 weeds.scene.Game.prototype.initFountain = function () {
     this.fountain = new rune.display.Sprite(448, 448, 128, 96, 'fountain')
     this.fountain.animation.create('run', [0, 1, 2, 3], 6, true)
     this.stage.addChild(this.fountain)
 }
 
-
+/**
+ * Function for when the player loses
+ *
+ */
 weeds.scene.Game.prototype.endGame = function () {
     
     this.timers.create({
         duration: 2000,
-        onStart: function () {
-            
-           
-        },
+       
         onComplete: function () {
             
             this.application.screen.removeChild(this.score)
             this.application.screen.removeChild(this.boostmeter)
             this.application.screen.removeChild(this.lives)
             if (this.highscore.test(this.score.value) >= 0) {
-               this.application.scenes.load([new weeds.scene.SetHighscore(this.highscore, this.score.value)])
+               this.application.scenes.load([new weeds.scene.SetHighscore(this.highscore, this.score.value, this.titlesong, this.gamepad)])
                 
 
             } else {
-                this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score.value)])
+                this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score.value, this.titlesong, this.gamepad)])
             }
            
         }

@@ -10,11 +10,11 @@
  *
  * @class
  * @classdesc
- * 
- * Game scene.
+ * @param {object} 
+ * Tutorial scene.
  */
-weeds.scene.Tutorial = function () {
-    this.gamepad = null
+weeds.scene.Tutorial = function (gamepad) {
+    this.gamepad = gamepad
     this.gamepadGraphic = null
     this.running = null
     this.shoot = null;
@@ -49,8 +49,7 @@ weeds.scene.Tutorial.prototype.constructor = weeds.scene.Tutorial;
  */
 weeds.scene.Tutorial.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-    
-this.initGamepad()
+
 this.initGamepadGraphic()
 this.initRunning()
 this.initShoot()
@@ -89,12 +88,10 @@ weeds.scene.Tutorial.prototype.dispose = function () {
 };
 
 
-
-weeds.scene.Tutorial.prototype.initGamepad = function () {
-    this.gamepad = this.gamepads.get(0)
-}
-
-
+/**
+ * Function that initilizes the running animation
+ *
+ */
 weeds.scene.Tutorial.prototype.initRunning = function() {
     this.running = new weeds.player.Player(190, 280, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.running.animation.create('run', [0,1,2,3,4,5], 6, true)
@@ -107,6 +104,10 @@ weeds.scene.Tutorial.prototype.initRunning = function() {
     
 }
 
+/**
+ * Function that initilizes the shooting animation
+ *
+ */
 weeds.scene.Tutorial.prototype.initShoot = function() {
     this.shoot = new weeds.player.Player(315, 280, 96, 32, 'gardenershooting', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.shoot.animation.create('shoot', [0,1,2,3,4,5], 6, true)
@@ -119,6 +120,11 @@ weeds.scene.Tutorial.prototype.initShoot = function() {
     
 }
 
+
+/**
+ * Function that initilizes the dash animation
+ *
+ */
 weeds.scene.Tutorial.prototype.initDash = function() {
     this.dash = new weeds.player.Player(470, 280, 24, 30, 'full24X30', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.dash.animation.create('dash', [6,7,8,9,10,11], 6, true)
@@ -131,12 +137,19 @@ weeds.scene.Tutorial.prototype.initDash = function() {
     
 }
 
-
+/**
+ * Function that initilizes the gamempad graphic
+ *
+ */
 weeds.scene.Tutorial.prototype.initGamepadGraphic = function(){
     this.gamepadGraphic = new rune.display.Graphic(50,40, 530, 250, 'gamepad')
     this.stage.addChild(this.gamepadGraphic)
 }
 
+/**
+ * Function that initilizes the ulti animation
+ *
+ */
 weeds.scene.Tutorial.prototype.initGas = function() {
     this.gas = new weeds.player.Player(547, 175, 32, 32, 'gasexplosion', this.gamepad, this.bullets, this.enemys, this.camera, this.boost, this.boostmeter, this, this.overlay)
     this.gas.animation.create('gas', [0,1,2,3,4,5,6], 6, true)

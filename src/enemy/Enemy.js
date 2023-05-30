@@ -1,3 +1,7 @@
+/**
+ * Class for the enemy
+ * @param {number, number, number, number, string, object, object, object, object, object, object, object, object}  
+ */
 weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, game) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.tilemap = tilemap
@@ -21,6 +25,10 @@ weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, en
 weeds.enemy.Enemy.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.enemy.Enemy.prototype.constructor = weeds.enemy.Enemy;
 
+/**
+ * Function that updates the enemy every Tick
+ * @param {number}  
+ */
 weeds.enemy.Enemy.prototype.updateEnemy = function (step){
   if (this.player.lives <= 0){
         

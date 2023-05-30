@@ -1,3 +1,7 @@
+/**
+ * Class for the thornbush 
+ * @param {number, number, number, number, string, object, object, object, object, object, object, object, object, object, object, object, object}  
+ */
 weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, side, thorns, camera, bullets, game) {
     weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, game);
     this.life = 4
@@ -15,6 +19,10 @@ weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player
 weeds.enemy.Thornbush.prototype = Object.create(weeds.enemy.Enemy.prototype);
 weeds.enemy.Thornbush.prototype.constructor = weeds.enemy.Thornbush;
 
+/**
+ * Function that updates the thornbush every tick
+ * @param {number}  
+ */
 weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
     this.thornTimer += step;
     if (this.player.lives <= 0) {
@@ -100,6 +108,10 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
     }
 }
 
+/**
+ * Function that spawns new thorns
+ *   
+ */
 weeds.enemy.Thornbush.prototype.attack = function () {
     for (var i = 0; i < 4; i++) {
         var thorn = new weeds.projectile.Thorn(this.centerX, this.centerY, 16, 16, 'thorn', this.player, this.camera, this.thorns, this.lives, i, this.bullets)

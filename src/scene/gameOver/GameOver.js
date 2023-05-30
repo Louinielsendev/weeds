@@ -10,14 +10,18 @@
  *
  * @class
  * @classdesc
- * 
- * Game scene.
+ * @param {object, object, object, obejct} 
+ * GameOver scene.
  */
-weeds.scene.GameOver = function (highscore, score) {
+weeds.scene.GameOver = function (highscore, score, titlesong, gamepad) {
     this.highscore = highscore
     this.menu = null
-    this.gamepad = null;
+    this.gamepad = gamepad;
     this.score = score;
+    this.movesound = null;
+    this.selectsound = null; 
+    this.selectsound = null;
+    this.titlesong = titlesong
     
     //--------------------------------------------------------------------------
     // Super call
@@ -50,7 +54,6 @@ weeds.scene.GameOver.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
    
     this.initMenu();
-    this.initGamepad();
 
 
     var gameoverText = new rune.text.BitmapField('Game Over!')
@@ -65,6 +68,11 @@ weeds.scene.GameOver.prototype.init = function () {
     score.y = 100
     score.x += 30
     this.stage.addChild(score)
+    
+    this.movesound = this.application.sounds.sound.get('movesound', false);
+    this.selectsound = this.application.sounds.sound.get('selectsound', false);
+    this.titlesong.fade(1, 100)
+    this.titlesong.play()
 
 
 
@@ -81,17 +89,18 @@ weeds.scene.GameOver.prototype.init = function () {
  */
 weeds.scene.GameOver.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    if (this.gamepad.justPressed(13)) {
+    if (this.gamepad.justPressed(13) || this.keyboard.justPressed('DOWN')) {
         this.menu.down()
-
+        this.movesound.play()
     }
 
-    if (this.gamepad.justPressed(12)) {
+    if (this.gamepad.justPressed(12) || this.keyboard.justPressed('UP')) {
         this.menu.up()
+        this.movesound.play()
     }
-    if (this.gamepad.justPressed(0)) {
+    if (this.gamepad.justPressed(0) || this.keyboard.justPressed('ENTER')) {
         this.menu.select()
-        console.log(this.menu)
+        this.selectsound.play()
     }
 
 
@@ -110,6 +119,11 @@ weeds.scene.GameOver.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
 
+
+/**
+ * Function that initilizes the menu with choices.
+ *
+ */
 weeds.scene.GameOver.prototype.initMenu = function () {
     this.menu = new rune.ui.VTMenu()
     this.menu.y = 170
@@ -120,10 +134,11 @@ weeds.scene.GameOver.prototype.initMenu = function () {
     this.stage.addChild(this.menu)
     
     this.menu.onSelect(function () {
-        console.log(this.menu.m_index)
         switch (this.menu.m_index) {
             case 0:
-                this.application.scenes.load([new weeds.scene.Game(this.highscore)])
+                this.titlesong.fade(0, 1000)
+                this.titlesong.stop()
+                this.application.scenes.load([new weeds.scene.Game(this.highscore, this.titlesong, this.gamepad,)])
                 break;
             case 1:
                 this.application.scenes.load([new weeds.scene.Menu()])
@@ -133,6 +148,3 @@ weeds.scene.GameOver.prototype.initMenu = function () {
     }, this)
 }
 
-weeds.scene.GameOver.prototype.initGamepad = function () {
-    this.gamepad = this.gamepads.get(0)
-}

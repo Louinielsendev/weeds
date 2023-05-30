@@ -10,14 +10,18 @@
  *
  * @class
  * @classdesc
- * 
- * Game scene.
+ *
+ * Menu scene.
  */
 weeds.scene.Menu = function () {
     this.highscore = null
     this.menu = null
     this.gamepad = null;
     this.titlescreen = null
+    this.movesound = null;
+    this.selectsound = null;
+    this.titlesong = null;
+ 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -53,8 +57,10 @@ weeds.scene.Menu.prototype.init = function () {
     this.initMenu();
     this.initGamepad();
     this.initTitlescreen();
-    
-
+    this.movesound = this.application.sounds.sound.get('movesound', false);
+    this.selectsound = this.application.sounds.sound.get('selectsound', false);
+    this.titlesong = this.application.sounds.master.get('titlesong')
+    this.titlesong.play()
 
 
 
@@ -73,15 +79,19 @@ weeds.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepad.justPressed(13) || this.keyboard.justPressed('DOWN')) {
         this.menu.down()
-
+        this.movesound.play()
     }
 
     if (this.gamepad.justPressed(12) || this.keyboard.justPressed('UP')) {
         this.menu.up()
+        this.movesound.play()
     }
     if (this.gamepad.justPressed(0) || this.keyboard.justPressed('ENTER')) {
         this.menu.select()
-      
+        this.selectsound.play()
+       if (this.menu.m_index == 0) {
+        this.titlesong.fade(0, 2000)
+       }
     }
 
 
@@ -100,6 +110,10 @@ weeds.scene.Menu.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };
 
+/**
+ * Function that initilizes the menu with choices
+ *
+ */
 weeds.scene.Menu.prototype.initMenu = function () {
     this.menu = new rune.ui.VTMenu()
     this.menu.y = 170
@@ -113,23 +127,32 @@ weeds.scene.Menu.prototype.initMenu = function () {
        
         switch (this.menu.m_index) {
             case 0:
-                this.application.scenes.load([new weeds.scene.Game(this.highscore)])
+                this.titlesong.stop()
+                this.application.scenes.load([new weeds.scene.Game(this.highscore, this.titlesong, this.gamepad)])
                 break;
             case 1:
-                this.application.scenes.load([new weeds.scene.Tutorial()])
+                this.application.scenes.load([new weeds.scene.Tutorial(this.gamepad)])
                 break;
             case 2:
-                this.application.scenes.load([new weeds.scene.Highscore(this.highscore)])
+                this.application.scenes.load([new weeds.scene.Highscore(this.highscore, this.gamepad)])
                 break;
         }
 
     }, this)
 }
 
+/**
+ * Function that initilizes the gamepad
+ *
+ */
 weeds.scene.Menu.prototype.initGamepad = function () {
     this.gamepad = this.gamepads.get(0)
 }
 
+/**
+ * Function that initilizes the title screen
+ *
+ */
 weeds.scene.Menu.prototype.initTitlescreen = function(){
     this.titlescreen = new rune.display.Graphic(0, 0, 640, 360, 'titlescreen')
     this.stage.addChild(this.titlescreen)

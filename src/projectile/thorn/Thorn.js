@@ -1,3 +1,7 @@
+/**
+ * Class for thorn
+ * @param {number, number, number, number, string, object, object, object, object, object, object}  
+ */
 weeds.projectile.Thorn = function (x, y, width, height, resource, player, camera, thorns, lives, side, bullets) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.side = side
@@ -12,6 +16,10 @@ weeds.projectile.Thorn = function (x, y, width, height, resource, player, camera
 weeds.projectile.Thorn.prototype = Object.create(rune.display.Sprite.prototype);
 weeds.projectile.Thorn.prototype.constructor = weeds.projectile.Thorn;
 
+/**
+ * Function that updates thorn every tick
+ *  
+ */
 weeds.projectile.Thorn.prototype.updateThorn = function () {
     if (this.intersects(this.player)) {
         this.player.lives -= 1
@@ -30,6 +38,10 @@ weeds.projectile.Thorn.prototype.updateThorn = function () {
 
 }
 
+/**
+ * Funktion that decides wich side the thorn is going to spawn at
+ * 
+ */
 weeds.projectile.Thorn.prototype.setDirection = function () {
 
     switch (this.side) {

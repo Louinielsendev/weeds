@@ -1,3 +1,7 @@
+/**
+ * Class for boost that loads the player-ulti
+ * @param {number, number, number, number, string}  
+ */
 weeds.boost.Boost = function (x, y, width, height, resource) {
     rune.display.Sprite.call(this, x, y, width, height, resource);
     this.pickupSound = this.application.sounds.sound.get('pickup')
