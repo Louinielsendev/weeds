@@ -6,7 +6,7 @@ weeds.enemy.Bigplant = function (x, y, width, height, resource, tilemap, player,
     weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lifes, killScores, game);
     this.speed = .5
     this.life = 15
-    this.value = 250
+    this.value = 500
    
     this.attackCooldown = 600
 }

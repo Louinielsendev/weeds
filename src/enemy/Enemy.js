@@ -17,9 +17,10 @@ weeds.enemy.Enemy = function (x, y, width, height, resource, tilemap, player, en
     this.life = 5
     this.attackTimer = 0
     this.attackCooldown = 1000
-    this.value = 10
+    this.value = 25
     this.killScores = killScores
     this.game = game
+    this.ultied = false
 }
 
 weeds.enemy.Enemy.prototype = Object.create(rune.display.Sprite.prototype);
@@ -119,7 +120,7 @@ weeds.enemy.Enemy.prototype.death = function(){
   this.score.updateScore()
  
   var randomNumber = Math.floor(Math.random() * 8)
-  if (randomNumber == 7){
+  if (randomNumber == 7 && !this.ultied){
     var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
     boost.animation.create('idle', [0,1], 2, true)
     this.boost.addMember(boost)

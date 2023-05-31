@@ -162,7 +162,7 @@ weeds.player.Player.prototype.ultimate = function(){
            
             if (this.camera.viewport.intersects(enemy)) {
                 enemy.life -= 10
-
+                enemy.ultied = true
             }
             this.boostmeter.value = 0
             this.boostmeter.animation.gotoAndPlay('fill', 0)

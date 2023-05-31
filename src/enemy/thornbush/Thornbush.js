@@ -4,11 +4,11 @@
  */
 weeds.enemy.Thornbush = function (x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, side, thorns, camera, bullets, game) {
     weeds.enemy.Enemy.call(this, x, y, width, height, resource, tilemap, player, enemys, boost, score, lives, killScores, game);
-    this.life = 4
+    this.life = 6
     this.lives = lives
     this.speed = 1.5
     this.side = side
-    this.value = 25
+    this.value = 250
     this.thorns = thorns
     this.thornTimer = 0
     this.thornCooldown = 2000
@@ -30,33 +30,7 @@ weeds.enemy.Thornbush.prototype.updateEnemy = function (step) {
         return
     }
     if (this.life <= 0) {
-        var text = this.value.toString()
-        var killScore = new weeds.stats.KillScore(text)
-        killScore.x = this.x
-        killScore.y = this.y
-        this.game.dieSound.play()
-        this.killScores.addMember(killScore)
-        this.enemys.removeMember(this)
-        this.score.value += this.value
-        this.score.updateScore()
-        var randomNumber = Math.floor(Math.random() * 12)
-        if (randomNumber == 7) {
-            var boost = new weeds.boost.Boost(this.x, this.y, 16, 16, 'gas', this.player, this.boost)
-            boost.animation.create('idle', [0, 1], 2, true)
-            this.boost.addMember(boost)
-        }
-        var smoke = new rune.display.Sprite(this.x, this.y, 32, 32, 'smoke');
-        smoke.animation.create('idle', [0, 1, 2, 3], 12, true)
-        this.game.timers.create({
-            duration: 500,
-            onStart: function () {
-
-                this.stage.addChild(smoke)
-            },
-            onComplete: function () {
-                this.stage.removeChild(smoke)
-            }
-        })
+       this.death()
     }
 
 
@@ -121,3 +95,5 @@ weeds.enemy.Thornbush.prototype.attack = function () {
     }
 
 }
+
+
