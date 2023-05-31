@@ -142,7 +142,7 @@ weeds.player.Player.prototype.updatePlayer = function (step) {
  * @param {number}  
  */
 weeds.player.Player.prototype.shot = function (radians) {
-    console.log(typeof radians)
+  
     this.shootSound.play()
     var bullet = new weeds.projectile.Bullet((this.x + 15), (this.y + 20), 4, 4, 'bullet2', radians, this.bullets, this.enemys, this.camera)
     this.bullets.addMember(bullet)

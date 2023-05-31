@@ -78,6 +78,6 @@ weeds.spawner.Spawner.prototype.update = function (step) {
     if (this.spawnCooldown > 500) {
         this.spawnCooldown -= fraction
     }
-    console.log(this.spawnCooldown)
+    
 
 }

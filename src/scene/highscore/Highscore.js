@@ -94,7 +94,7 @@ weeds.scene.Highscore.prototype.initHighscoreList = function(){
     this.highscoreList.y = 150
     this.highscoreList.x = 290
     for(var i = 0; i < this.highscore.m_data[0].length; i++){
-        console.log(this.highscore)
+       
         var text = this.highscore.m_data[0][i].name + ' ' + this.highscore.m_data[0][i].score
         this.highscoreList.add(text)
     }

@@ -92,7 +92,7 @@ weeds.enemy.Enemy.prototype.moveEnemy = function(){
 
 weeds.enemy.Enemy.prototype.attack = function(step){
   this.attackTimer += step
-    console.log(this.player.flicker.active)
+  
   if (this.attackTimer >= this.attackCooldown && !this.player.flicker.active){
     this.player.flicker.start(1000)
     this.player.lives -= 1;
@@ -105,7 +105,7 @@ weeds.enemy.Enemy.prototype.attack = function(step){
 }
 
 weeds.enemy.Enemy.prototype.death = function(){
-  console.log(this.game.timers)
+ 
    
   this.game.dieSound.play()
   var text = this.value.toString()
