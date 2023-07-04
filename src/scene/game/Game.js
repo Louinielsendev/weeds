@@ -34,7 +34,7 @@ weeds.scene.Game = function (highscore, titlesong, gamepad) {
     this.themeSong = null
     this.dieSound = null
     this.fountain = null
- 
+
 
 
     //--------------------------------------------------------------------------
@@ -123,7 +123,7 @@ weeds.scene.Game.prototype.update = function (step) {
                 this.killScores.removeMember(killScore)
 
             }
-           
+
         })
         this.enemys.forEachMember(enemy => {
 
@@ -191,7 +191,7 @@ weeds.scene.Game.prototype.initPlayer = function () {
     this.player.animation.create('idle', [18, 19], 6, true)
     this.player.animation.create('run', [0, 1, 2, 3, 4, 5], 6, true)
     this.player.animation.create('dash', [6, 7, 8, 9, 10, 11], 6, true)
-    this.player.animation.create('death', [12,13,14,15], 1.8, true)
+    this.player.animation.create('death', [12, 13, 14, 15], 1.8, true)
     this.stage.addChild(this.player)
     this.camera.targets.add(this.player)
 
@@ -210,8 +210,6 @@ weeds.scene.Game.prototype.initCamera = function () {
     this.overlay.alpha = .6
     this.camera.addChild(this.overlay)
     this.overlay.visible = false
-
-
 
 }
 
@@ -295,28 +293,63 @@ weeds.scene.Game.prototype.initFountain = function () {
  *
  */
 weeds.scene.Game.prototype.endGame = function () {
-    
     this.timers.create({
         duration: 2000,
-       
+
         onComplete: function () {
-            
-            this.application.screen.removeChild(this.score)
-            this.application.screen.removeChild(this.boostmeter)
-            this.application.screen.removeChild(this.lives)
+            this.gameOver = true
+            this.disposeGraphics()
             if (this.highscore.test(this.score.value) >= 0) {
                this.application.scenes.load([new weeds.scene.SetHighscore(this.highscore, this.score.value, this.titlesong, this.gamepad)])
-                
+
 
             } else {
                 this.application.scenes.load([new weeds.scene.GameOver(this.highscore, this.score.value, this.titlesong, this.gamepad)])
             }
-           
+
         }
 
+    });
+}
+
+/**
+ * Function that disposes the graphics before ending the game.
+ *
+ */
+weeds.scene.Game.prototype.disposeGraphics = function () {
+    this.application.screen.removeChild(this.score)
+    this.boostmeter.dispose()
+    this.boostmeter = null
+    this.lives.dispose()
+    this.lives = null
+    this.player.dispose()
+    this.player = null
+    this.fountain.dispose()
+    this.fountain = null
+    this.background.dispose()
+    this.background = null
+    this.overlay.dispose()
+    this.overlay = null
+
+    this.enemys.forEachMember(enemy =>{
+        enemy.dispose()
+        enemy = null
     })
 
+    this.thorns.forEachMember(thorn =>{
+       thorn.dispose()
+       thorn = null
+    })
 
+    this.killScores.forEachMember(score => {
+        score.dispose()
+        score = null
+    })
 
+    this.bullets.forEachMember(bullet => {
+        bullet.dispose()
+        bullet = null
+    })
 
 }
+
